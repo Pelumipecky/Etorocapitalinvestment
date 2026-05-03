@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Template Preview</title>
+    <style>
+        body { font-family: sans-serif; background: #333; padding: 20px; color: #fff; }
+        .preview-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .preview-card { background: #fff; border-radius: 8px; overflow: hidden; width: 600px; height: 600px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .preview-header { background: #0f172a; padding: 10px; color: #f0b90b; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        iframe { width: 100%; height: calc(100% - 40px); border: none; }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; margin-bottom: 30px;">Cypher Vault Email Notification Styles</h1>
+    
+    <div class="preview-container">
+        <!-- Welcome Email -->
+        <div class="preview-card">
+            <div class="preview-header">
+                <span>1. Welcome Email</span>
+            </div>
+            <iframe id="frame-welcome"></iframe>
+        </div>
+
+        <!-- Deposit Request (User) -->
+        <div class="preview-card">
+            <div class="preview-header">
+                <span>2. Deposit Confirmation (User)</span>
+            </div>
+            <iframe id="frame-deposit"></iframe>
+        </div>
+
+        <!-- Deposit Request (Admin) -->
+        <div class="preview-card">
+            <div class="preview-header">
+                <span>3. Admin Deposit Alert</span>
+            </div>
+            <iframe id="frame-admin"></iframe>
+        </div>
+
+        <!-- ROI Credit -->
+        <div class="preview-card">
+            <div class="preview-header">
+                <span>4. Daily ROI Credit</span>
+            </div>
+            <iframe id="frame-roi"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Use the actual styles from your template logic
+        const styles = `
+            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; margin: 0; padding: 0; }
+            .container { max-width: 100%; margin: 0; background: #ffffff; overflow: hidden; }
+            .header { background-color: #0f172a; color: #f0b90b; padding: 25px 0; text-align: center; }
+            .content { padding: 30px 20px; }
+            .footer { background-color: #f4f4f4; color: #666; padding: 20px; text-align: center; font-size: 12px; border-top: 1px solid #ddd; }
+            .button { display: inline-block; padding: 10px 20px; background-color: #f0b90b; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 20px; }
+            .info-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+            .info-table td { padding: 8px; border-bottom: 1px solid #eee; }
+            .info-table td:first-child { font-weight: bold; color: #555; width: 40%; }
+            .highlight { color: #f0b90b; font-weight: bold; }
+        `;
+
+        const wrap = (content) => `
+            <!DOCTYPE html>
+            <html>
+            <head><style>${styles}</style></head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <a href="#" target="_blank">
+                            <img src="https://cyphervault.vercel.app/images/ciphervaultlogobig.svg" alt="Cypher Vault" width="200" style="display: inline-block; max-width: 100%; height: auto; border: 0;" />
+                        </a>
+                    </div>
+                    <div class="content">${content}</div>
+                    <div class="footer">
+                        <p>&copy; 2024 Cypher Vault. All rights reserved.</p>
+                        <p>This is an automated message, please do not reply.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `;
+
+        // Mock Content matching the templates
+        const welcomeContent = `
+            <h2>Welcome, John Doe!</h2>
+            <p>Thank you for joining Cypher Vault. We are thrilled to have you on board.</p>
+            <p>Your account has been successfully created. You can now access your dashboard.</p>
+            <p><strong>Next Steps:</strong></p>
+            <ul>
+                <li>Complete your KYC verification.</li>
+                <li>Explore our tailored investment plans.</li>
+            </ul>
+            <center><a href="#" class="button">Login to Dashboard</a></center>
+        `;
+
+        const depositContent = `
+            <h2>Deposit Request Received</h2>
+            <p>Hello John,</p>
+            <p>We have received your deposit request. It is currently <strong>Pending</strong>.</p>
+            <table class="info-table">
+                <tr><td>Amount:</td><td>$5,000.00</td></tr>
+                <tr><td>Method:</td><td>USDT (TRC20)</td></tr>
+                <tr><td>Transaction Hash:</td><td><small>0x7f...8a9b</small></td></tr>
+                <tr><td>Status:</td><td>Pending</td></tr>
+            </table>
+            <p>You will receive another email once your deposit is approved.</p>
+        `;
+
+        const adminContent = `
+            <h2>New Deposit Action Required</h2>
+            <p>A new deposit request has been submitted by <strong>John Doe</strong>.</p>
+            <table class="info-table">
+                <tr><td>User:</td><td>John Doe (john@example.com)</td></tr>
+                <tr><td>Amount:</td><td>$5,000.00</td></tr>
+                <tr><td>Method:</td><td>USDT</td></tr>
+                <tr><td>Tx Hash:</td><td><small>0x7f...8a9b</small></td></tr>
+            </table>
+            <center><a href="#" class="button">Go to Admin Panel</a></center>
+        `;
+
+        const roiContent = `
+            <h2>Daily Profit Received</h2>
+            <p>Hello John,</p>
+            <p>Your daily ROI for the plan <strong>15-Day Plan</strong> has been credited.</p>
+            <table class="info-table">
+                <tr><td>Amount Credited:</td><td class="highlight">+$175.00</td></tr>
+                <tr><td>Plan:</td><td>15-Day Plan</td></tr>
+                <tr><td>Date:</td><td>Oct 24, 2024, 3:00 PM</td></tr>
+                <tr><td>Current Balance:</td><td>$5,175.00</td></tr>
+            </table>
+            <p>Keep your investment active to continue earning daily returns!</p>
+        `;
+
+        // Render
+        document.getElementById('frame-welcome').srcdoc = wrap(welcomeContent);
+        document.getElementById('frame-deposit').srcdoc = wrap(depositContent);
+        document.getElementById('frame-admin').srcdoc = wrap(adminContent);
+        document.getElementById('frame-roi').srcdoc = wrap(roiContent);
+    </script>
+</body>
+</html>

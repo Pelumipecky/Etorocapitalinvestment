@@ -1,0 +1,293 @@
+{
+  "nav": {
+    "markets": "Mercados",
+    "packages": "Planos",
+    "faq": "FAQ",
+    "about": "Sobre",
+    "contact": "Contato",
+    "signup": "Registrar",
+    "login": "Entrar",
+    "dashboard": "Painel",
+    "logout": "Sair"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Plataforma institucional de criptomoedas",
+      "title": "Exposição disciplinada para equipes sérias de ativos digitais.",
+      "subtitle": "eToro Trust Capital combina custódia, pesquisa quantitativa e relatórios transparentes para que cada alocação seja tão resiliente quanto um cofre.",
+      "cta": "Abra uma conta",
+      "ctaDashboard": "Ir para o Painel",
+      "ctaExplore": "Explorar planos",
+      "pillTitle": "Negocie Bitcoin sem taxas",
+      "pillCopy": "Disponível para novos clientes no primeiro trimestre."
+    },
+    "features": {
+      "title": "Por que escolher a eToro Trust Capital?",
+      "security": { "title": "Segurança bancária", "description": "Criptografia avançada e autenticação multifator protegem seus investimentos" },
+      "returns": { "title": "Altos Retornos", "description": "Taxas de ROI competitivas com histórico comprovado de sucesso" },
+      "support": { "title": "Suporte 24/7", "description": "Suporte ao cliente 24 horas por dia para todas as suas necessidades de negociação" }
+    },
+    "stats": {
+      "title": "Nossas Conquistas",
+      "users": "Usuários Ativos",
+      "assets": "Ativos Listados",
+      "clients": "Clientes",
+      "fees": "Taxas",
+      "volume": "Volume de Negociação",
+      "countries": "Países Atendidos",
+      "volumeDetail": "Negociado em spot, futuros e produtos estruturados.",
+      "listedAssetsDetail": "Moedas selecionadas e estratégias de rendimento tokenizadas.",
+      "clientsDetail": "Carteiras globais, tesourarias e family offices.",
+      "feesDetail": "Precificação institucional com rebates para makers."
+    },
+    "packages": {
+      "title": "Planos de Investimento",
+      "subtitle": "Seis planos de investimento para cada estratégia de crescimento.",
+      "description": "Escolha o plano que atende aos seus objetivos de investimento e prazo. Cada plano oferece ROI diário com capitalização automática.",
+      "ctaAllocate": "Alocar agora",
+      "badge": { "featured": "Destaque", "standard": "Padrão" },
+      "bullets": {
+        "duration": "Duração: {{duration}}",
+        "dailyRoi": "ROI diário: {{daily}}",
+        "min": "Investimento mínimo: ${{min}}",
+        "max": "Investimento máximo: ${{max}}",
+        "unlimited": "Ilimitado",
+        "totalReturn": "Retorno total: {{total}}%"
+      }
+    },
+    "guide": {
+      "title": "Construa seu portfólio de investimentos",
+      "lead": "Comece seu primeiro investimento com estes passos fáceis.",
+      "steps": {
+        "verify": { "title": "Verifique sua identidade", "copy": "Complete o processo de verificação de identidade para proteger sua conta e transações." },
+        "fund": { "title": "Financie sua conta", "copy": "Adicione fundos à sua conta cripto para começar a investir. Você pode adicionar fundos com vários métodos de pagamento." },
+        "start": { "title": "Comece a investir", "copy": "Você está pronto! Compre/venda cripto, configure compras recorrentes e descubra o que a eToro Trust Capital Investments tem a oferecer." }
+      },
+      "ctaGetStarted": "Começar"
+    },
+    "help": {
+      "eyebrow": "Precisa de ajuda?",
+      "title": "Consultores, documentação e pesquisa disponíveis.",
+      "desk": { "title": "Atendimento 24/7", "copy": "Envie mensagens aos consultores a qualquer momento para ajudar com rebalanceamento ou fluxos de tesouraria.", "cta": "Conversar Agora" },
+      "faq": { "title": "Biblioteca de FAQ", "copy": "Navegue por custódia, staking e orientação de on/off-ramp em nossa documentação.", "cta": "Ver FAQ" },
+      "blog": { "title": "Blog + Pesquisa", "copy": "Insights semanais on-chain e notas macro diretamente do time de quant.", "cta": "Ler Insights" }
+    },
+    "about": {
+      "eyebrow": "Sobre eToro Trust Capital",
+      "title": "Infraestrutura com foco em segurança e alocações orientadas a dados.",
+      "lead": "Cada carteira é verificada, cada contraparte auditada e cada rebalanceamento registrado. Family offices, tesourarias e fundações confiam em nós para escalar a exposição sem comprometer a governança.",
+      "checklist": { "custody": "Parceiros de custódia com SOC 2 + padrões de seguro", "quantResearch": "Pesquisa quantitativa abrangendo DeFi, RWA e infraestrutura de IA", "advisors": "Consultores dedicados com cadências de relatórios institucionais" },
+      "ctaAdvisor": "Fale com um consultor",
+      "ctaMore": "Mais sobre nós",
+      "mission": { "eyebrow": "Missão", "title": "Desbloqueie o crescimento financeiro de longo prazo com exposição disciplinada a criptomoedas.", "grid": { "security": { "title": "Segurança em Primeiro Lugar", "copy": "Cada ativo é avaliado quanto à conformidade, custódia e risco de contraparte." }, "data": { "title": "Orientado por Dados", "copy": "Modelos quantitativos, telemetria on-chain e insights de IA guiam a alocação." }, "transparent": { "title": "Transparente", "copy": "Dashboards em tempo real, provas em blockchain e cartas mensais." } } }
+    }
+  },
+    "stats": {
+      "volumeDetail": "Negociado em spot, futuros e produtos estruturados.",
+      "listedAssetsDetail": "Moedas selecionadas e estratégias de rendimento tokenizadas.",
+      "clientsDetail": "Carteiras globais, tesourarias e family offices.",
+      "feesDetail": "Precificação institucional com rebates para makers."
+    },
+    "packages": {
+      "badge": {
+        "featured": "Destaque",
+        "standard": "Padrão"
+      },
+      "bullets": {
+        "duration": "Duração: {{duration}}",
+        "dailyRoi": "ROI diário: {{daily}}",
+        "min": "Investimento mínimo: ${{min}}",
+        "max": "Investimento máximo: ${{max}}",
+        "unlimited": "Ilimitado",
+        "totalReturn": "Retorno total: {{total}}%"
+      }
+    },
+    "help": {
+      "desk": { "title": "Atendimento 24/7", "copy": "Envie mensagens aos consultores a qualquer momento para ajudar com rebalanceamento ou fluxos de tesouraria.", "cta": "Conversar Agora" },
+      "faq": { "title": "Biblioteca de FAQ", "copy": "Navegue por custódia, staking e orientação de on/off-ramp em nossa documentação.", "cta": "Ver FAQ" },
+      "blog": { "title": "Blog + Pesquisa", "copy": "Insights semanais on-chain e notas macro diretamente do time de quant.", "cta": "Ler Insights" }
+    },
+  "dashboard": {
+    "welcome": "Bem-vindo de volta",
+    "balance": "Saldo",
+    "portfolio": "Portfólio",
+    "investments": "Investimentos",
+    "transactions": "Transações",
+    "settings": "Configurações",
+    "support": "Suporte",
+    "profile": "Perfil",
+    "wallet": "Carteira",
+    "deposit": "Depositar",
+    "withdraw": "Sacar",
+    "trade": "Negociar",
+    "stocks": "Ações",
+    "crypto": "Cripto"
+  },
+  "alerts": {
+    "titleKycApproved": "KYC Aprovado!",
+    "titleKycUpdate": "Atualização KYC",
+    "titleValidationError": "Erro de Validação",
+    "titleProfileUpdated": "Perfil Atualizado!",
+    "titleUpdateFailed": "Falha na Atualização",
+    "titlePasswordMismatch": "Senhas Diferentes",
+    "titlePasswordTooShort": "Senha Muito Curta",
+    "titleFeatureComingSoon": "Recurso em Breve",
+    "titlePasswordChangeFailed": "Falha ao Alterar a Senha",
+    "titleAccountDeletionComingSoon": "Recurso em Breve",
+    "titleDeletionFailed": "Falha na Exclusão",
+    "titleInvalidAmount": "Valor Inválido",
+    "titleTransactionHashRequired": "Hash da Transação Obrigatório",
+    "titlePaymentProofRequired": "Comprovante de Pagamento Obrigatório",
+    "titleFailedToCreateInvestment": "Erro",
+    "titleMissingInformation": "Informação Faltando",
+    "kycApproved": "Sua verificação KYC foi aprovada.",
+    "kycUpdate": "Sua verificação KYC precisa de atenção.",
+    "validationErrorEmailRequired": "E-mail é obrigatório.",
+    "validationErrorInvalidEmail": "Por favor, insira um endereço de e-mail válido.",
+    "profileUpdated": "Seu perfil foi atualizado com sucesso.",
+    "updateFailed": "Falha ao atualizar perfil: {{errorMessage}}",
+    "passwordMismatch": "As novas senhas não coincidem!",
+    "passwordTooShort": "A senha deve ter pelo menos 6 caracteres!",
+    "featureComingSoon": "Recurso em breve",
+    "passwordChangeFailed": "Falha ao alterar a senha. Por favor, tente novamente.",
+    "accountDeletionComingSoon": "O recurso de exclusão de conta será implementado em breve.",
+    "deletionFailed": "Falha ao excluir a conta. Por favor, contate o suporte.",
+    "invalidAmountMin": "Investimento mínimo é ${{min}}",
+    "invalidAmountMax": "Investimento máximo é ${{max}}",
+    "transactionHashRequired": "Por favor, insira o hash/ID da transação para verificar o pagamento",
+    "paymentProofRequired": "Por favor, envie uma captura de tela ou foto do seu pagamento como comprovante",
+    "failedToCreateInvestment": "Falha ao criar investimento. Por favor, tente novamente.",
+    "missingInformation": "Por favor, preencha todos os campos obrigatórios",
+    "missingDocumentsTitle": "Documentos Faltando",
+    "missingDocumentsMessage": "Por favor, carregue todos os documentos obrigatórios",
+    "cannotRemoveMoreThanCurrentBonus": "Não é possível remover mais do que o bônus atual",
+    "bonusRemovedTitle": "Bônus Removido",
+    "bonusRemovedMessage": "${{amount}} de bônus removido de {{name}}",
+    "failedToRemoveBonusTitle": "Erro",
+    "failedToRemoveBonusMessage": "Falha ao remover o bônus",
+    "roleManagementComingSoonTitle": "Em Breve",
+    "roleManagementComingSoonMessage": "A gestão de funções estará disponível em uma atualização futura.",
+    "avatarUpdatedTitle": "Avatar Atualizado",
+    "avatarUpdatedMessage": "Seu avatar de administrador foi atualizado com sucesso!",
+    "failedToSubmitWithdrawalTitle": "Erro",
+    "failedToSubmitWithdrawalMessage": "Falha ao enviar a solicitação de saque. Por favor, tente novamente.",
+    "loanSubmitFailedTitle": "Erro",
+    "loanSubmitFailedMessage": "Falha ao enviar a solicitação de empréstimo. Por favor, tente novamente.",
+    "investmentCreatedTitle": "Investimento Criado!",
+    "investmentCreatedMessage": "Seu investimento {{planName}} de ${{capital}} foi criado. Você ganhará ${{daily}} por dia durante {{duration}} dias quando ativado.",
+    "investmentFailedTitle": "Falha no Investimento",
+    "investmentFailedMessage": "Não foi possível criar o investimento. Por favor, verifique os detalhes e tente novamente.",
+    "orderPlacedTitle": "Ordem Efetuada",
+    "orderPlacedMessage": "Ordem de {{orderType}}: {{qty}} ações de {{symbol}} a ${{price}} = ${{total}}",
+    "investmentsClearedTitle": "Investimentos Limpados",
+    "investmentsClearedMessage": "Todos os investimentos pendentes foram rejeitados.",
+    "withdrawalsClearedTitle": "Saques Limpados",
+    "withdrawalsClearedMessage": "Todos os saques pendentes foram rejeitados.",
+      "userDeletedTitle": "Usuário Excluído",
+      "userDeletedMessage": "Conta de usuário excluída com sucesso",
+    "investmentApprovedTitle": "Investimento Aprovado",
+    "investmentApprovedMessage": "O investimento foi aprovado e salvo com sucesso!",
+    "approvalFailedTitle": "Falha na Aprovação",
+    "approvalFailedMessage": "Falha ao aprovar o investimento. Por favor, tente novamente.",
+    "investmentRejectedTitle": "Investimento Rejeitado",
+    "investmentRejectedMessage": "O investimento foi rejeitado e salvo.",
+    "rejectionFailedTitle": "Falha na Rejeição",
+    "rejectionFailedMessage": "Falha ao rejeitar o investimento. Por favor, tente novamente.",
+    "withdrawalApprovedTitle": "Saque Aprovado",
+    "withdrawalApprovedMessage": "O saque foi aprovado e salvo com sucesso!",
+    "withdrawalRejectedTitle": "Saque Rejeitado",
+    "withdrawalRejectedMessage": "O saque foi rejeitado e salvo.",
+    "approvalErrorMessage": "Falha ao aprovar o saque. Por favor, tente novamente.",
+    "kycApprovedAdminTitle": "KYC Aprovado",
+    "kycApprovedAdminMessage": "A verificação KYC foi aprovada!",
+    "kycApprovedError": "Falha ao aprovar a verificação KYC.",
+    "kycRejectedTitle": "KYC Rejeitado",
+    "kycRejectedMessage": "A verificação KYC foi rejeitada.",
+    "kycRejectedError": "Falha ao rejeitar a verificação KYC.",
+    "invalidAmountError": "Por favor, insira um valor válido",
+    "balanceUpdatedTitle": "Saldo Atualizado",
+    "balanceUpdatedMessage": "Saldo atualizado para ${{balance}}!",
+    "loanApprovedTitle": "Empréstimo Aprovado",
+    "loanApprovedMessage": "Empréstimo de ${{amount}} foi aprovado.",
+    "loanRejectedTitle": "Empréstimo Rejeitado",
+    "loanRejectedMessage": "Solicitação de empréstimo foi rejeitada.",
+    "bonusAddedTitle": "Bônus Adicionado",
+    "bonusAddedMessage": "${{bonus}} de bônus adicionado para {{name}}",
+    "addBonusError": "Falha ao adicionar bônus"
+  },
+  "confirm": {
+    "deleteAccountTitle": "Excluir Conta",
+    "deleteAccountMessage": "Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita!",
+    "finalWarningTitle": "Aviso Final",
+    "finalWarningMessage": "Isso excluirá permanentemente todos os seus dados, incluindo investimentos e retiradas. Você tem certeza?",
+    "deleteUserTitle": "Excluir Conta do Usuário",
+    "deleteUserMessage": "Tem certeza de que deseja excluir esta conta de usuário? Esta ação não pode ser desfeita!"
+    ,
+    "clearPendingInvestmentsTitle": "Limpar todos os investimentos pendentes",
+    "clearPendingInvestmentsMessage": "Isso rejeitará todos os investimentos pendentes. Esta ação não pode ser desfeita.",
+    "clearPendingWithdrawalsTitle": "Limpar todos os saques pendentes",
+    "clearPendingWithdrawalsMessage": "Isso rejeitará todos os saques pendentes. Esta ação não pode ser desfeita."
+    ,
+    "finalWarningConfirmText": "Sim, Excluir Tudo"
+  },
+  "notifications": {
+    "welcomeTitle": "Bem-vindo!",
+    "welcomeMessage": "Bem-vindo ao seu painel! Comece explorando os planos de investimento.",
+    "welcomeMessageWithName": "Bem-vindo {{name}}! Comece a explorar nossos planos de investimento."
+    ,
+    "investmentCreatedTitle": "Novo Investimento Criado",
+    "investmentCreatedMessage": "Você investiu ${{capital}} em {{plan}}. Ganhos diários: ${{daily}} por {{duration}} dias."
+  },
+  
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "view": "Ver",
+    "close": "Fechar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "search": "Pesquisar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "export": "Exportar",
+    "import": "Importar",
+    "download": "Baixar",
+    "upload": "Carregar",
+    "select": "Selecionar",
+    "choose": "Escolher",
+    "all": "Todos",
+    "none": "Nenhum",
+    "yes": "Sim",
+    "no": "Não"
+  },
+  "pages": {
+    "stockTrading": {
+      "title": "Negociação de Ações",
+      "description": "Negocie ações com dados em tempo real e gráficos avançados"
+    }
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "de": "Deutsch",
+    "zh": "中文",
+    "ja": "日本語",
+    "pt": "Português",
+    "pt-BR": "Português (Brasil)"
+  }
+  ,
+  "buttons": {
+    "clearPendingInvestments": "Limpar Investimentos Pendentes",
+    "clearPendingWithdrawals": "Limpar Saques Pendentes",
+    "deleteUserAccount": "Excluir Usuário",
+    "deleteAccount": "Excluir Conta"
+  }
+}

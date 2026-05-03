@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "markets": "Marchés",
+    "packages": "Forfaits",
+    "faq": "FAQ",
+    "about": "À propos",
+    "contact": "Contact",
+    "signup": "S'inscrire",
+    "login": "Se connecter",
+    "dashboard": "Tableau de bord",
+    "logout": "Se déconnecter"
+  },
+  "home": {
+    "hero": {
+      "title": "Exposition disciplinée pour les équipes sérieuses d'actifs numériques.",
+      "subtitle": "eToro Trust Capital allie la garde, la recherche quantitative et les rapports transparents pour que chaque allocation soit aussi résistante qu'un coffre-fort.",
+      "cta": "Ouvrir un compte"
+    },
+    "features": {
+      "title": "Pourquoi choisir eToro Trust Capital ?",
+      "security": {
+        "title": "Sécurité de niveau bancaire",
+        "description": "Chiffrement avancé et authentification multifactorielle protègent vos investissements"
+      },
+      "returns": {
+        "title": "Rendements élevés",
+        "description": "Taux de ROI compétitifs avec un historique éprouvé de succès"
+      },
+      "support": {
+        "title": "Support 24/7",
+        "description": "Support client 24h/24 pour tous vos besoins de trading"
+      }
+    },
+    "stats": {
+      "title": "Nos réalisations",
+      "users": "Utilisateurs actifs",
+      "volume": "Volume de trading",
+      "countries": "Pays desservis"
+    }
+  },
+  "dashboard": {
+    "welcome": "Bienvenue",
+    "balance": "Solde",
+    "portfolio": "Portefeuille",
+    "investments": "Investissements",
+    "transactions": "Transactions",
+    "settings": "Paramètres",
+    "support": "Support",
+    "profile": "Profil",
+    "wallet": "Portefeuille",
+    "deposit": "Déposer",
+    "withdraw": "Retirer",
+    "trade": "Trader",
+    "stocks": "Actions",
+    "crypto": "Crypto"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "save": "Sauvegarder",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "export": "Exporter",
+    "import": "Importer",
+    "download": "Télécharger",
+    "upload": "Téléverser",
+    "select": "Sélectionner",
+    "choose": "Choisir",
+    "all": "Tous",
+    "none": "Aucun",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "de": "Deutsch",
+    "zh": "中文",
+    "ja": "日本語"
+  }
+}

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Message from Cypher Vault</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', Arial, sans-serif;
+            background-color: #0F172A;
+            color: #F8FAFC;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .email-wrapper {
+            background-color: #0F172A;
+            padding: 20px;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, #1A1F3A 0%, #0F172A 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(240, 185, 11, 0.15);
+            border: 1px solid rgba(240, 185, 11, 0.2);
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(120deg, #F0B90B 0%, #D19E09 100%);
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .header-logo {
+            font-size: 32px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #0F172A;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-subtitle {
+            font-size: 13px;
+            color: rgba(15, 23, 42, 0.85);
+            margin: 8px 0 0 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+        }
+
+        /* MESSAGE CONTENT */
+        .message-wrapper {
+            padding: 40px 25px;
+        }
+
+        .message-intro {
+            font-size: 15px;
+            color: #CBD5E1;
+            margin: 0 0 25px 0;
+            line-height: 1.8;
+        }
+
+        .message-card {
+            background: linear-gradient(135deg, rgba(240, 185, 11, 0.08) 0%, rgba(240, 185, 11, 0.04) 100%);
+            border: 1px solid rgba(240, 185, 11, 0.25);
+            border-left: 4px solid #F0B90B;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .message-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #F0B90B 0%, #D19E09 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(240, 185, 11, 0.3);
+        }
+
+        .sender-info h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #F8FAFC;
+            font-weight: 600;
+        }
+
+        .sender-time {
+            font-size: 12px;
+            color: #94A3B8;
+            margin: 5px 0 0 0;
+        }
+
+        .message-body {
+            background: rgba(30, 41, 59, 0.6);
+            padding: 18px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid rgba(240, 185, 11, 0.1);
+        }
+
+        .message-text {
+            font-size: 15px;
+            color: #E2E8F0;
+            line-height: 1.8;
+            margin: 0;
+            word-wrap: break-word;
+        }
+
+        /* CTA SECTION */
+        .cta-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(240, 185, 11, 0.1) 0%, rgba(240, 185, 11, 0.05) 100%);
+            border: 1px solid rgba(240, 185, 11, 0.2);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .cta-section p {
+            margin: 0 0 18px 0;
+            font-size: 14px;
+            color: #CBD5E1;
+            font-weight: 500;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(120deg, #F0B90B 0%, #D19E09 100%);
+            color: #0F172A;
+            padding: 14px 45px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            box-shadow: 0 8px 24px rgba(240, 185, 11, 0.35);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            border: 2px solid transparent;
+        }
+
+        .cta-button:hover {
+            background: linear-gradient(120deg, #D19E09 0%, #B8860D 100%);
+            box-shadow: 0 12px 32px rgba(240, 185, 11, 0.45);
+            transform: translateY(-3px);
+        }
+
+        /* FOOTER */
+        .footer {
+            background: rgba(15, 23, 42, 0.8);
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid rgba(240, 185, 11, 0.15);
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: #94A3B8;
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .footer-link {
+            color: #F0B90B;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer-note {
+            font-size: 11px;
+            color: #64748B;
+            margin-top: 15px;
+            line-height: 1.6;
+            padding-top: 15px;
+            border-top: 1px solid rgba(240, 185, 11, 0.1);
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, rgba(240, 185, 11, 0.2) 50%, transparent 100%);
+            margin: 20px 0;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .email-container {
+                border-radius: 8px;
+                margin: 0;
+            }
+
+            .message-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .header {
+                padding: 30px 15px;
+            }
+
+            .message-wrapper {
+                padding: 25px 15px;
+            }
+
+            .message-card {
+                padding: 18px;
+            }
+
+            .cta-section {
+                padding: 18px;
+            }
+
+            .footer {
+                padding: 20px 15px;
+            }
+
+            .cta-button {
+                padding: 12px 35px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-wrapper">
+        <div class="email-container">
+
+            <!-- HEADER -->
+            <div class="header">
+                <div class="header-logo">🔐</div>
+                <h2>📬 New Message Received</h2>
+                <p class="header-subtitle">Cypher Vault Support</p>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="message-wrapper">
+                <p class="message-intro">
+                    Hello,<br>
+                    A new message has been received from a user on Cypher Vault. Please review and respond at your earliest convenience.
+                </p>
+
+                <!-- MESSAGE CARD -->
+                <div class="message-card">
+                    <div class="message-header">
+                        <div class="avatar">👤</div>
+                        <div class="sender-info">
+                            <h3>{{name}}</h3>
+                            <div class="sender-time">{{time}}</div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="message-body">
+                        <p class="message-text">{{message}}</p>
+                    </div>
+                </div>
+
+                <!-- CTA SECTION -->
+                <div class="cta-section">
+                    <p>💡 Respond to this message directly from your admin dashboard:</p>
+                    <a href="{{ .DashboardLink }}" class="cta-button">Open Dashboard</a>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="footer">
+                <div class="footer-logo">🔐 Cypher Vault</div>
+                
+                <p class="footer-text">
+                    <strong>Quick Access:</strong><br>
+                    <a href="{{ .DashboardLink }}" class="footer-link">View in Dashboard</a>
+                </p>
+
+                <p class="footer-note">
+                    This is an automated notification from Cypher Vault. Do not reply to this email.<br>
+                    © 2026 Cypher Vault. All rights reserved.<br>
+                    <a href="{{ .PreferencesLink }}" class="footer-link">Manage notification preferences</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

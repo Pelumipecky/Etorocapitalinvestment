@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "markets": "Märkte",
+    "packages": "Pakete",
+    "faq": "FAQ",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "signup": "Registrieren",
+    "login": "Anmelden",
+    "dashboard": "Dashboard",
+    "logout": "Abmelden"
+  },
+  "home": {
+    "hero": {
+      "title": "Disziplinierte Exposition für ernsthafte Digital-Asset-Teams.",
+      "subtitle": "eToro Trust Capital verbindet Verwahrung, quantitative Forschung und transparente Berichterstattung, damit jede Zuweisung so widerstandsfähig wie ein Tresor ist.",
+      "cta": "Konto eröffnen"
+    },
+    "features": {
+      "title": "Warum eToro Trust Capital wählen?",
+      "security": {
+        "title": "Banksicherheit",
+        "description": "Erweiterte Verschlüsselung und Multifaktor-Authentifizierung schützen Ihre Investitionen"
+      },
+      "returns": {
+        "title": "Hohe Renditen",
+        "description": "Wettbewerbsfähige ROI-Raten mit bewiesener Erfolgsgeschichte"
+      },
+      "support": {
+        "title": "24/7 Support",
+        "description": "Rund-um-die-Uhr-Kundensupport für alle Ihre Trading-Bedürfnisse"
+      }
+    },
+    "stats": {
+      "title": "Unsere Erfolge",
+      "users": "Aktive Benutzer",
+      "volume": "Handelsvolumen",
+      "countries": "Bediente Länder"
+    }
+  },
+  "dashboard": {
+    "welcome": "Willkommen zurück",
+    "balance": "Kontostand",
+    "portfolio": "Portfolio",
+    "investments": "Investitionen",
+    "transactions": "Transaktionen",
+    "settings": "Einstellungen",
+    "support": "Support",
+    "profile": "Profil",
+    "wallet": "Wallet",
+    "deposit": "Einzahlen",
+    "withdraw": "Auszahlen",
+    "trade": "Handeln",
+    "stocks": "Aktien",
+    "crypto": "Krypto"
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "view": "Ansehen",
+    "close": "Schließen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "sort": "Sortieren",
+    "export": "Exportieren",
+    "import": "Importieren",
+    "download": "Herunterladen",
+    "upload": "Hochladen",
+    "select": "Auswählen",
+    "choose": "Wählen",
+    "all": "Alle",
+    "none": "Keine",
+    "yes": "Ja",
+    "no": "Nein"
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "de": "Deutsch",
+    "zh": "中文",
+    "ja": "日本語"
+  }
+}

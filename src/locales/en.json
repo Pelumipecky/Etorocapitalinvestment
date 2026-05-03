@@ -1,0 +1,327 @@
+{
+  "nav": {
+    "markets": "Markets",
+    "packages": "Packages",
+    "faq": "FAQ",
+    "about": "About",
+    "contact": "Contact",
+    "signup": "Sign Up",
+    "login": "Log In",
+    "dashboard": "Dashboard",
+    "logout": "Log Out",
+    "downloads": "Downloads"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Institutional crypto platform",
+      "title": "Disciplined exposure for serious digital-asset teams.",
+      "subtitle": "eToro Trust Capital blends custody, quantitative research, and transparent reporting so every allocation is as resilient as a vault.",
+      "cta": "Open an account",
+      "ctaDashboard": "Go to Dashboard",
+      "ctaExplore": "Explore packages",
+      "pillTitle": "Trade Bitcoin with zero fees",
+      "pillCopy": "Available for new clients through Q1."
+    },
+    "features": {
+      "title": "Why Choose eToro Trust Capital?",
+      "security": {
+        "title": "Bank-Level Security",
+        "description": "Advanced encryption and multi-factor authentication protect your investments"
+      },
+      "returns": {
+        "title": "High Returns",
+        "description": "Competitive ROI rates with proven track record of success"
+      },
+      "support": {
+        "title": "24/7 Support",
+        "description": "Round-the-clock customer support for all your trading needs"
+      }
+    },
+    "stats": {
+      "title": "Our Achievements",
+      "users": "Active Users",
+      "assets": "Listed Assets",
+      "clients": "Clients",
+      "fees": "Fees",
+      "volume": "Trading Volume",
+      "countries": "Countries Served",
+      "volumeDetail": "Traded across spot, futures, and structured products.",
+      "listedAssetsDetail": "Curated coins and tokenized yield strategies.",
+      "clientsDetail": "Global wallets, treasuries, and family offices.",
+      "feesDetail": "Institutional pricing with maker rebates."
+    },
+    "packages": {
+      "badge": {
+        "featured": "Featured",
+        "standard": "Standard"
+      },
+      "bullets": {
+        "duration": "Duration: {{duration}}",
+        "dailyRoi": "Daily ROI: {{daily}}",
+        "min": "Min Investment: ${{min}}",
+        "max": "Max Investment: ${{max}}",
+        "unlimited": "Unlimited",
+        "totalReturn": "Total Return: {{total}}%"
+      }
+    },
+    "help": {
+      "desk": { "title": "24/7 Desk", "copy": "Message advisors anytime for rebalancing help or treasury workflows.", "cta": "Chat Now" },
+      "faq": { "title": "FAQ Library", "copy": "Browse custody, staking, and on/off-ramp guidance in our docs.", "cta": "View FAQ" },
+      "blog": { "title": "Blog + Research", "copy": "Weekly on-chain insights and macro notes straight from the quant floor.", "cta": "Read Insights" }
+    },
+    "about": {
+      "eyebrow": "About eToro Trust Capital",
+      "title": "Security-first infrastructure with data-driven allocations.",
+      "lead": "Every wallet is verified, every counterparty audited, and every rebalance recorded. Family offices, treasuries, and protocol foundations trust us to scale exposure without compromising governance.",
+      "checklist": {
+        "custody": "Custody partners meeting SOC 2 + insurance standards",
+        "quantResearch": "Quant research spanning DeFi, RWA, and AI infrastructure",
+        "advisors": "Dedicated advisors with institutional reporting cadences"
+      },
+      "ctaAdvisor": "Talk to an advisor",
+      "ctaMore": "More about us",
+      "mission": {
+        "eyebrow": "Mission",
+        "title": "Unlock long-term financial growth with disciplined crypto exposure.",
+        "grid": {
+          "security": { "title": "Security First", "copy": "Every asset is vetted for compliance, custody, and counterparty risk." },
+          "data": { "title": "Data Driven", "copy": "Quant models, on-chain telemetry, and AI insights guide allocation." },
+          "transparent": { "title": "Transparent", "copy": "Real-time dashboards, blockchain proofs, and monthly letters." }
+        }
+      }
+    },
+    "mobileApps": {
+      "title": "Invest on the go. Anywhere, anytime.",
+      "lead": "Stay in touch with our app and desktop client.",
+      "platforms": {
+        "appStore": "App Store",
+        "android": "Android APK",
+        "googlePlay": "Google Play",
+        "mac": "MacOS",
+        "windows": "Windows",
+        "linux": "Linux"
+      }
+    },
+    "guide": {
+      "title": "How to get started",
+      "lead": "A simple 3-step process to verify, fund, and start earning.",
+      "steps": {
+        "verify": { "title": "Verify identity", "copy": "Complete identity verification to unlock deposits and withdrawals." },
+        "fund": { "title": "Fund account", "copy": "Deposit funds via bank transfer or crypto to start investing." },
+        "start": { "title": "Start investing", "copy": "Choose a plan, allocate capital, and begin earning daily ROI." }
+      },
+      "ctaGetStarted": "Get started"
+    },
+    "helpSection2": {
+      "title": "Need Help?",
+      "chatTitle": "24/7 Chat Support",
+      "chatCopy": "Get 24/7 chat support with our friendly customer service agents.",
+      "chatCta": "Chat Now",
+      "faqTitle": "FAQ",
+      "faqCopy": "View FAQs for detailed instructions on specific features.",
+      "faqCta": "Learn More",
+      "blogTitle": "Blogs",
+      "blogCopy": "Stay up to date with the latest stories and commentary.",
+      "blogCta": "Learn More"
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "balance": "Balance",
+    "portfolio": "Portfolio",
+    "investments": "Investments",
+    "transactions": "Transactions",
+    "settings": "Settings",
+    "support": "Support",
+    "profile": "Profile",
+    "wallet": "Wallet",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "trade": "Trade",
+    "stocks": "Stocks",
+    "crypto": "Crypto"
+  },
+  "alerts": {
+    "titleKycApproved": "KYC Approved!",
+    "titleKycUpdate": "KYC Update",
+    "titleValidationError": "Validation Error",
+    "titleProfileUpdated": "Profile Updated!",
+    "titleUpdateFailed": "Update Failed",
+    "titlePasswordMismatch": "Password Mismatch",
+    "titlePasswordTooShort": "Password Too Short",
+    "titleFeatureComingSoon": "Feature Coming Soon",
+    "titlePasswordChangeFailed": "Password Change Failed",
+    "titleAccountDeletionComingSoon": "Feature Coming Soon",
+    "titleDeletionFailed": "Deletion Failed",
+    "titleInvalidAmount": "Invalid Amount",
+    "titleTransactionHashRequired": "Transaction Hash Required",
+    "titlePaymentProofRequired": "Payment Proof Required",
+    "titleFailedToCreateInvestment": "Error",
+    "titleMissingInformation": "Missing Information",
+    "kycApproved": "Your KYC verification has been approved.",
+    "kycUpdate": "Your KYC verification requires attention.",
+    "validationErrorEmailRequired": "Email is required.",
+    "validationErrorInvalidEmail": "Please enter a valid email address.",
+    "profileUpdated": "Your profile has been updated successfully.",
+    "updateFailed": "Failed to update profile: {{errorMessage}}",
+    "passwordMismatch": "New passwords do not match!",
+    "passwordTooShort": "Password must be at least 6 characters long!",
+    "featureComingSoon": "Feature Coming Soon",
+    "passwordChangeFailed": "Failed to change password. Please try again.",
+    "accountDeletionComingSoon": "Account deletion feature will be implemented soon.",
+    "deletionFailed": "Failed to delete account. Please contact support.",
+    "invalidAmountMin": "Minimum investment is ${{min}}",
+    "invalidAmountMax": "Maximum investment is ${{max}}",
+    "transactionHashRequired": "Please enter your transaction hash/ID to verify payment",
+    "paymentProofRequired": "Please upload a screenshot or photo of your payment as proof",
+    "failedToCreateInvestment": "Failed to create investment. Please try again.",
+    "missingInformation": "Please fill in all required fields",
+    "missingDocumentsTitle": "Missing Documents",
+    "missingDocumentsMessage": "Please upload all required documents",
+    "cannotRemoveMoreThanCurrentBonus": "Cannot remove more than current bonus",
+    "bonusRemovedTitle": "Bonus Removed",
+    "bonusRemovedMessage": "${{amount}} bonus removed from {{name}}",
+    "failedToRemoveBonusTitle": "Error",
+    "failedToRemoveBonusMessage": "Failed to remove bonus",
+    "roleManagementComingSoonTitle": "Coming Soon",
+    "roleManagementComingSoonMessage": "Role management will be available in a future update.",
+    "avatarUpdatedTitle": "Avatar Updated",
+    "avatarUpdatedMessage": "Your admin avatar has been updated successfully!",
+    "failedToSubmitWithdrawalTitle": "Error",
+    "failedToSubmitWithdrawalMessage": "Failed to submit withdrawal request. Please try again.",
+    "loanSubmitFailedTitle": "Error",
+    "loanSubmitFailedMessage": "Failed to submit loan request. Please try again.",
+    "investmentCreatedTitle": "Investment Created!",
+    "investmentCreatedMessage": "Your {{planName}} investment of ${{capital}} has been created. You'll earn ${{daily}} daily for {{duration}} days once activated.",
+    "investmentFailedTitle": "Investment Failed",
+    "investmentFailedMessage": "Unable to create investment. Please check your details and try again.",
+    "orderPlacedTitle": "Order Placed",
+    "orderPlacedMessage": "{{orderType}} Order: {{qty}} shares of {{symbol}} at ${{price}} = ${{total}}",
+    "insufficientBalanceTitle": "Insufficient Balance",
+    "insufficientBalanceMessage": "You do not have enough balance for this trade.",
+    "bonusConverted": "Bonus of ${{bonusToBalance}} has been converted to your available balance!",
+    "tradeFailedTitle": "Trade Failed",
+    "tradeFailedMessage": "Failed to process your trade. Please try again.",
+    "investmentNotFoundTitle": "Investment Not Found",
+    "investmentNotFoundMessage": "The selected investment could not be found.",
+    "amountAddedTitle": "Amount Added",
+    "balanceAddedMessage": "Successfully added ${{amount}} to available balance for {{name}}",
+    "addAmountError": "Addition Failed",
+    "addAmountErrorMessage": "Failed to add amount. Please try again.",
+    "noBonusToConvertTitle": "No Bonus Available",
+    "noBonusToConvertMessage": "This user has no bonus to convert.",
+    "bonusConvertedTitle": "Bonus Converted",
+    "bonusConvertedMessage": "Successfully converted ${{bonus}} bonus to available balance for {{name}}",
+    "convertBonusError": "Conversion Failed",
+    "convertBonusErrorMessage": "Failed to convert bonus. Please try again.",
+    "investmentApprovedTitle": "Investment Approved",
+    "investmentApprovedMessage": "Investment has been approved and saved successfully!",
+    "approvalFailedTitle": "Approval Failed",
+    "approvalFailedMessage": "Failed to approve investment. Please try again.",
+    "investmentRejectedTitle": "Investment Rejected",
+    "investmentRejectedMessage": "Investment has been rejected and saved.",
+    "rejectionFailedTitle": "Rejection Failed",
+    "rejectionFailedMessage": "Failed to reject investment. Please try again.",
+    "withdrawalApprovedTitle": "Withdrawal Approved",
+    "withdrawalApprovedMessage": "Withdrawal has been approved and saved successfully!",
+    "withdrawalRejectedTitle": "Withdrawal Rejected",
+    "withdrawalRejectedMessage": "Withdrawal has been rejected and saved.",
+    "approvalErrorMessage": "Failed to approve withdrawal. Please try again.",
+    "kycApprovedAdminTitle": "KYC Approved",
+    "kycApprovedAdminMessage": "KYC verification has been approved!",
+    "kycApprovedError": "Failed to approve KYC verification.",
+    "kycRejectedTitle": "KYC Rejected",
+    "kycRejectedMessage": "KYC verification has been rejected.",
+    "kycRejectedError": "Failed to reject KYC verification.",
+    "invalidAmountError": "Please enter a valid amount",
+    "balanceUpdatedTitle": "Balance Updated",
+    "balanceUpdatedMessage": "Balance updated to ${{balance}}!",
+    "loanApprovedTitle": "Loan Approved",
+    "loanApprovedMessage": "Loan of ${{amount}} has been approved.",
+    "loanRejectedTitle": "Loan Rejected",
+    "loanRejectedMessage": "Loan request has been rejected.",
+    "bonusAddedTitle": "Bonus Added",
+    "bonusAddedMessage": "${{bonus}} bonus added to {{name}}",
+    "addBonusError": "Failed to add bonus",
+    "investmentsClearedTitle": "Investments Cleared",
+    "investmentsClearedMessage": "All pending investments have been rejected.",
+    "withdrawalsClearedTitle": "Withdrawals Cleared",
+    "withdrawalsClearedMessage": "All pending withdrawals have been rejected.",
+    "userDeletedTitle": "User Deleted",
+    "userDeletedMessage": "User account deleted successfully"
+  },
+  
+  "confirm": {
+    "deleteAccountTitle": "Delete Account",
+    "deleteAccountMessage": "Are you sure you want to delete your account? This action cannot be undone!",
+    "finalWarningTitle": "Final Warning",
+    "finalWarningMessage": "This will permanently delete all your data including investments and withdrawals. Are you absolutely sure?",
+    "deleteUserTitle": "Delete User Account",
+    "deleteUserMessage": "Are you sure you want to delete this user account? This action cannot be undone!",
+    "clearPendingInvestmentsTitle": "Clear All Pending Investments",
+    "clearPendingInvestmentsMessage": "This will reject all pending investments. This action cannot be undone.",
+    "clearPendingWithdrawalsTitle": "Clear All Pending Withdrawals",
+    "clearPendingWithdrawalsMessage": "This will reject all pending withdrawals. This action cannot be undone."
+    ,
+    "finalWarningConfirmText": "Yes, Delete Everything"
+  },
+  "notifications": {
+    "welcomeTitle": "Welcome!",
+    "welcomeMessage": "Welcome to your dashboard! Start by exploring investment plans.",
+    "welcomeMessageWithName": "Welcome {{name}}! Start exploring our investment plans.",
+    "investmentCreatedTitle": "New Investment Created",
+    "investmentCreatedMessage": "You invested ${{capital}} in {{plan}}. Daily earnings: ${{daily}} for {{duration}} days.",
+    "withdrawalRequestedTitle": "Withdrawal Requested",
+    "withdrawalRequestedMessage": "Your withdrawal request of ${{amount}} via {{method}} has been submitted for processing."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "export": "Export",
+    "import": "Import",
+    "download": "Download",
+    "upload": "Upload",
+    "select": "Select",
+    "choose": "Choose",
+    "all": "All",
+    "none": "None",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "pages": {
+    "stockTrading": {
+      "title": "Stock Trading",
+      "description": "Trade stocks with real-time data and advanced charting"
+    }
+  },
+  
+  "languages": {
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "de": "Deutsch",
+    "zh": "中文",
+    "ja": "日本語"
+  }
+  ,
+  "buttons": {
+    "clearPendingInvestments": "Clear Pending Investments",
+    "clearPendingWithdrawals": "Clear Pending Withdrawals",
+    "deleteUserAccount": "Delete User",
+    "deleteAccount": "Delete Account"
+  }
+}

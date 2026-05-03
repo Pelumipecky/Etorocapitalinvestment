@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "markets": "市场",
+    "packages": "套餐",
+    "faq": "常见问题",
+    "about": "关于我们",
+    "contact": "联系我们",
+    "signup": "注册",
+    "login": "登录",
+    "dashboard": "仪表板",
+    "logout": "退出登录"
+  },
+  "home": {
+    "hero": {
+      "title": "为严肃的数字资产团队提供纪律性曝光。",
+      "subtitle": "eToro Trust Capital 将托管、量化研究和透明报告相结合，使每个分配都像保险库一样坚固。",
+      "cta": "开户"
+    },
+    "features": {
+      "title": "为什么选择 eToro Trust Capital？",
+      "security": {
+        "title": "银行级安全",
+        "description": "高级加密和多因素认证保护您的投资"
+      },
+      "returns": {
+        "title": "高回报",
+        "description": "具有成功记录的竞争性 ROI 率"
+      },
+      "support": {
+        "title": "24/7 支持",
+        "description": "全天候客户支持满足您的所有交易需求"
+      }
+    },
+    "stats": {
+      "title": "我们的成就",
+      "users": "活跃用户",
+      "volume": "交易量",
+      "countries": "服务国家"
+    }
+  },
+  "dashboard": {
+    "welcome": "欢迎回来",
+    "balance": "余额",
+    "portfolio": "投资组合",
+    "investments": "投资",
+    "transactions": "交易",
+    "settings": "设置",
+    "support": "支持",
+    "profile": "个人资料",
+    "wallet": "钱包",
+    "deposit": "存款",
+    "withdraw": "提款",
+    "trade": "交易",
+    "stocks": "股票",
+    "crypto": "加密货币"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "cancel": "取消",
+    "confirm": "确认",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "view": "查看",
+    "close": "关闭",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "search": "搜索",
+    "filter": "筛选",
+    "sort": "排序",
+    "export": "导出",
+    "import": "导入",
+    "download": "下载",
+    "upload": "上传",
+    "select": "选择",
+    "choose": "选择",
+    "all": "全部",
+    "none": "无",
+    "yes": "是",
+    "no": "否"
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "de": "Deutsch",
+    "zh": "中文",
+    "ja": "日本語"
+  }
+}

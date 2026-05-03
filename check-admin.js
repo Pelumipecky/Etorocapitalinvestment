@@ -1,0 +1,25 @@
+// Check admin user data
+import { createClient } from '@supabase/supabase-js'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL,
+  process.env.VITE_SUPABASE_ANON_KEY
+)
+
+async function checkAdmin() {
+  const { data, error } = await supabase
+    .from('users')
+    .select('idnum, email, userName, role')
+    .eq('role', 'admin')
+
+  if (error) {
+    console.error('Error:', error)
+  } else {
+    console.log('Admin user:', data)
+  }
+}
+
+checkAdmin()

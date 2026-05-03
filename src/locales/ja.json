@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "markets": "市場",
+    "packages": "パッケージ",
+    "faq": "FAQ",
+    "about": "会社概要",
+    "contact": "お問い合わせ",
+    "signup": "新規登録",
+    "login": "ログイン",
+    "dashboard": "ダッシュボード",
+    "logout": "ログアウト"
+  },
+  "home": {
+    "hero": {
+      "title": "真剣なデジタル資産チームのための規律あるエクスポージャー。",
+      "subtitle": "eToro Trust Capital は保管、定量調査、透明な報告を組み合わせ、各割り当てが金庫のように強靭になるようにします。",
+      "cta": "アカウントを開設"
+    },
+    "features": {
+      "title": "eToro Trust Capital を選ぶ理由",
+      "security": {
+        "title": "銀行レベルのセキュリティ",
+        "description": "高度な暗号化と多要素認証で投資を保護"
+      },
+      "returns": {
+        "title": "高いリターン",
+        "description": "実績のある成功履歴を持つ競争力のある ROI レート"
+      },
+      "support": {
+        "title": "24/7 サポート",
+        "description": "すべての取引ニーズに対応する24時間体制のカスタマーサポート"
+      }
+    },
+    "stats": {
+      "title": "私たちの実績",
+      "users": "アクティブユーザー",
+      "volume": "取引量",
+      "countries": "サービス提供国"
+    }
+  },
+  "dashboard": {
+    "welcome": "おかえりなさい",
+    "balance": "残高",
+    "portfolio": "ポートフォリオ",
+    "investments": "投資",
+    "transactions": "取引",
+    "settings": "設定",
+    "support": "サポート",
+    "profile": "プロフィール",
+    "wallet": "ウォレット",
+    "deposit": "入金",
+    "withdraw": "出金",
+    "trade": "取引",
+    "stocks": "株式",
+    "crypto": "暗号通貨"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "success": "成功",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "save": "保存",
+    "delete": "削除",
+    "edit": "編集",
+    "view": "表示",
+    "close": "閉じる",
+    "back": "戻る",
+    "next": "次へ",
+    "previous": "前へ",
+    "search": "検索",
+    "filter": "フィルター",
+    "sort": "並べ替え",
+    "export": "エクスポート",
+    "import": "インポート",
+    "download": "ダウンロード",
+    "upload": "アップロード",
+    "select": "選択",
+    "choose": "選択",
+    "all": "すべて",
+    "none": "なし",
+    "yes": "はい",
+    "no": "いいえ"
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "de": "Deutsch",
+    "zh": "中文",
+    "ja": "日本語"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "cipher-vault-server",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest --detectOpenHandles --runInBand"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.31.0",
+    "ciphervault-app": "file:..",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.22.1",
+    "express-rate-limit": "^6.11.2",
+    "node-fetch": "^2.7.0",
+    "node-schedule": "^2.1.1",
+    "nodemailer": "^6.9.4"
+  },
+  "devDependencies": {
+    "jest": "^29.6.1",
+    "nodemon": "^2.0.22",
+    "supertest": "^6.3.4"
+  }
+}

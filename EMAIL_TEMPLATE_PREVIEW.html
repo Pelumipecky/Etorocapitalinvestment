@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cypher Vault Email Template Preview</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #2c3e50; background-color: #ecf0f1; margin: 0; padding: 0; }
+    .container { max-width: 650px; margin: 15px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.12); }
+    .header { background: linear-gradient(135deg, #0f172a 0%, #1a2637 100%); padding: 50px 20px; text-align: center; position: relative; }
+    .header-logo { display: inline-block; margin-bottom: 15px; }
+    .header-logo img { max-width: 180px; height: auto; border: 0; }
+    .header h1 { margin: 15px 0 0 0; font-size: 28px; color: #f0b90b; font-weight: 600; letter-spacing: 0.5px; }
+    .header-divider { height: 3px; background: linear-gradient(90deg, #f0b90b, rgba(240, 185, 11, 0.3)); margin-top: 15px; }
+    .content { padding: 40px 30px; }
+    .content h2 { color: #0f172a; font-size: 22px; margin-bottom: 15px; font-weight: 600; }
+    .content p { color: #555; margin-bottom: 15px; line-height: 1.7; }
+    .content ul { margin-left: 20px; margin-bottom: 20px; }
+    .content ul li { margin-bottom: 8px; color: #555; }
+    .footer { background: linear-gradient(135deg, #0f172a 0%, #1a2637 100%); color: #cbd5e1; padding: 25px 20px; text-align: center; font-size: 12px; border-top: 1px solid #1e293b; }
+    .footer p { margin: 5px 0; }
+    .button { display: inline-block; padding: 12px 28px; background: linear-gradient(135deg, #f0b90b, #ffd700); color: #0f172a; text-decoration: none; border-radius: 6px; font-weight: 600; margin-top: 20px; box-shadow: 0 2px 6px rgba(240, 185, 11, 0.3); transition: all 0.3s; }
+    .button:hover { opacity: 0.9; }
+    .info-table { width: 100%; border-collapse: collapse; margin: 25px 0; background: #f8fafc; border-radius: 8px; overflow: hidden; }
+    .info-table tr { border-bottom: 1px solid #e2e8f0; }
+    .info-table tr:last-child { border-bottom: none; }
+    .info-table td { padding: 14px 16px; }
+    .info-table td:first-child { font-weight: 600; color: #0f172a; width: 40%; background: #f1f5f9; }
+    .info-table td:last-child { color: #1f2937; font-weight: 500; }
+    .highlight { color: #f0b90b; font-weight: 700; }
+    .status-active { color: #10b981; font-weight: 600; }
+    .status-pending { color: #f59e0b; font-weight: 600; }
+    .status-rejected { color: #ef4444; font-weight: 600; }
+    .section { margin-bottom: 25px; }
+    .center { text-align: center; }
+    .small-text { font-size: 13px; color: #9ca3af; }
+    .preview-note { text-align: center; padding: 20px; background: #fffbeb; color: #92400e; border: 1px solid #fcd34d; border-radius: 8px; margin: 20px 0; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div style="max-width: 700px; margin: 20px auto;">
+    <div class="preview-note">
+      📧 This is a preview of the updated email template. The header is now bigger with a prominent logo and gradient design. Tables are sleek and robust.
+    </div>
+  </div>
+
+  <!-- INVESTMENT APPROVED EMAIL PREVIEW -->
+  <div class="container">
+    <div class="header">
+      <div class="header-logo">
+        <a href="https://cyphervault.vercel.app" target="_blank" style="text-decoration: none;">
+          <img src="https://cyphervault.vercel.app/images/ciphervaultlogobig.png" alt="Cypher Vault" style="display: block; max-width: 100%; height: auto; border: 0;" />
+        </a>
+      </div>
+      <h1>Investment Approved</h1>
+      <div class="header-divider"></div>
+    </div>
+    <div class="content">
+      <div class="section">
+        <p>Hello <strong>John Doe</strong>,</p>
+        <p>🎉 Great news! Your investment has been reviewed and is now <span class="status-active">ACTIVE</span>.</p>
+      </div>
+      
+      <div class="section">
+        <h2>Investment Details</h2>
+        <table class="info-table">
+          <tr>
+            <td>Investment ID</td>
+            <td><strong>INV-2025-001234</strong></td>
+          </tr>
+          <tr>
+            <td>Plan Name</td>
+            <td>3-Month Premium</td>
+          </tr>
+          <tr>
+            <td>Amount Invested</td>
+            <td><span class="highlight">$5,000.00</span></td>
+          </tr>
+          <tr>
+            <td>Start Date</td>
+            <td>January 18, 2026</td>
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td><span class="status-active">✓ Active</span></td>
+          </tr>
+        </table>
+      </div>
+      
+      <div class="section">
+        <p>Your investment is now live and will begin generating <strong>daily returns</strong> based on your selected plan. Track your performance anytime from your dashboard.</p>
+        <div class="center">
+          <a href="https://cyphervault.vercel.app/dashboard" class="button">View My Investment</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <p>&copy; 2026 Cypher Vault. All rights reserved.</p>
+      <p class="small-text">This is an automated message, please do not reply.</p>
+    </div>
+  </div>
+
+  <!-- DEPOSIT APPROVED EMAIL PREVIEW -->
+  <div style="margin-top: 40px;"></div>
+  
+  <div class="container">
+    <div class="header">
+      <div class="header-logo">
+        <a href="https://cyphervault.vercel.app" target="_blank" style="text-decoration: none;">
+          <img src="https://cyphervault.vercel.app/images/ciphervaultlogobig.png" alt="Cypher Vault" style="display: block; max-width: 100%; height: auto; border: 0;" />
+        </a>
+      </div>
+      <h1>Deposit Approved</h1>
+      <div class="header-divider"></div>
+    </div>
+    <div class="content">
+      <div class="section">
+        <p>Hello <strong>Sarah Johnson</strong>,</p>
+        <p>✅ Great news! Your deposit of <span class="highlight">$2,500.00</span> has been successfully approved and credited to your account balance.</p>
+      </div>
+
+      <div class="section">
+        <h2>Transaction Details</h2>
+        <table class="info-table">
+          <tr>
+            <td>Amount</td>
+            <td><span class="highlight">$2,500.00</span></td>
+          </tr>
+          <tr>
+            <td>Payment Method</td>
+            <td>Cryptocurrency (Bitcoin)</td>
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td><span class="status-active">✓ Approved</span></td>
+          </tr>
+          <tr>
+            <td>Processed Date</td>
+            <td>January 18, 2026</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="section">
+        <p>You can now use these funds to purchase an investment plan and start earning daily returns.</p>
+        <div class="center">
+          <a href="https://cyphervault.vercel.app/dashboard" class="button">View Balance</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <p>&copy; 2026 Cypher Vault. All rights reserved.</p>
+      <p class="small-text">This is an automated message, please do not reply.</p>
+    </div>
+  </div>
+
+  <!-- ROI CREDITED EMAIL PREVIEW -->
+  <div style="margin-top: 40px;"></div>
+  
+  <div class="container">
+    <div class="header">
+      <div class="header-logo">
+        <a href="https://cyphervault.vercel.app" target="_blank" style="text-decoration: none;">
+          <img src="https://cyphervault.vercel.app/images/ciphervaultlogobig.png" alt="Cypher Vault" style="display: block; max-width: 100%; height: auto; border: 0;" />
+        </a>
+      </div>
+      <h1>Daily ROI Credited</h1>
+      <div class="header-divider"></div>
+    </div>
+    <div class="content">
+      <div class="section">
+        <p>Hello <strong>Michael Chen</strong>,</p>
+        <p>💰 Your daily ROI has been credited! Keep your investment active to continue earning.</p>
+      </div>
+
+      <div class="section">
+        <h2>Earnings Summary</h2>
+        <table class="info-table">
+          <tr>
+            <td>Amount Credited</td>
+            <td><span class="highlight">+$50.00</span></td>
+          </tr>
+          <tr>
+            <td>Plan Name</td>
+            <td>3-Month Premium</td>
+          </tr>
+          <tr>
+            <td>Credited Date</td>
+            <td>January 18, 2026</td>
+          </tr>
+          <tr>
+            <td>New Balance</td>
+            <td>$7,850.00</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="section">
+        <p>Your investment is performing excellently. Continue to monitor your portfolio and watch your wealth grow!</p>
+        <div class="center">
+          <a href="https://cyphervault.vercel.app/dashboard" class="button">Track Investment</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <p>&copy; 2026 Cypher Vault. All rights reserved.</p>
+      <p class="small-text">This is an automated message, please do not reply.</p>
+    </div>
+  </div>
+
+</body>
+</html>
