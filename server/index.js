@@ -933,6 +933,183 @@ app.post('/api/investments/pending-notification', async (req, res) => {
 });
 // ========== END INVESTMENT PENDING NOTIFICATION ENDPOINT ==========
 
+// POST /api/investments/create — Create a new investment from user's balance
+app.post('/api/investments/create', async (req, res) => {
+  try {
+    const { userId, planId, planName, amount, roi, durationDays, status } = req.body || {};
+
+    console.log('\n🔵 [ENDPOINT CALLED] /api/investments/create');
+    console.log('Body received:', { userId, planId, planName, amount, roi, durationDays, status });
+
+    // Validate required fields
+    if (!userId || !planId || !planName || !amount || roi === undefined || !durationDays) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Fetch user to verify balance
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('idnum, balance, email, userName, name')
+      .eq('id', userId)
+      .single();
+
+    if (userError || !user) {
+      console.error('❌ User not found:', userError);
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const userBalance = user.balance || 0;
+    const investmentAmount = parseFloat(amount);
+
+    // Verify sufficient balance
+    if (investmentAmount > userBalance) {
+      return res.status(400).json({ 
+        error: 'Insufficient balance',
+        available: userBalance,
+        requested: investmentAmount
+      });
+    }
+
+    // Deduct investment amount from user balance
+    const newBalance = userBalance - investmentAmount;
+    await supabase
+      .from('users')
+      .update({ balance: newBalance })
+      .eq('id', userId);
+
+    // Create investment record
+    const investmentRecord = {
+      idnum: user.idnum,
+      userId: userId,
+      plan: planName,
+      planId: planId,
+      capital: investmentAmount,
+      roi: roi,
+      durationDays: durationDays,
+      status: status || 'pending',
+      authStatus: 'pending',
+      creditedRoi: 0,
+      creditedBonus: 0,
+      date: new Date().toISOString(),
+      created_at: new Date().toISOString()
+    };
+
+    const { data: investment, error: investError } = await supabase
+      .from('investments')
+      .insert(investmentRecord)
+      .select()
+      .single();
+
+    if (investError) {
+      console.error('❌ Investment creation error:', investError);
+      
+      // Refund balance if investment creation failed
+      await supabase
+        .from('users')
+        .update({ balance: userBalance })
+        .eq('id', userId);
+      
+      return res.status(500).json({ error: 'Failed to create investment' });
+    }
+
+    // Create notification for admin
+    try {
+      const adminNotificationSent = await sendAdminActivityEmail({
+        subject: 'New Investment Request',
+        heading: 'New Investment Pending Approval',
+        rows: [
+          { label: 'User', value: user.userName || user.name || user.email },
+          { label: 'Email', value: user.email },
+          { label: 'Plan', value: planName },
+          { label: 'Amount', value: `$${investmentAmount.toFixed(2)}` },
+          { label: 'ROI', value: `${roi}%` },
+          { label: 'Duration', value: `${durationDays} days` },
+          { label: 'Investment ID', value: investment.id }
+        ]
+      });
+      console.log('Admin notification sent:', adminNotificationSent);
+    } catch (adminNotifyErr) {
+      console.warn('⚠️ Failed to send admin notification:', adminNotifyErr);
+    }
+
+    // Send confirmation email to user
+    try {
+      const expectedReturn = (investmentAmount * roi / 100).toFixed(2);
+      const html = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #0f172a; border-bottom: 2px solid #f0b90b; padding-bottom: 10px;">Investment Request Received</h2>
+          <p>Hi ${user.userName || user.name || 'User'},</p>
+          <p>Your investment request has been received and is pending approval. Here are the details:</p>
+          
+          <table style="width: 100%; border-collapse: collapse; margin: 20px 0; border: 1px solid #e5e7eb;">
+            <tr style="background: #f3f4f6; border-bottom: 1px solid #e5e7eb;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a;">Plan</td>
+              <td style="padding: 12px; color: #0f172a;">${planName}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e5e7eb;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a;">Investment Amount</td>
+              <td style="padding: 12px; color: #f0b90b; font-weight: bold;">$${investmentAmount.toFixed(2)}</td>
+            </tr>
+            <tr style="background: #f3f4f6; border-bottom: 1px solid #e5e7eb;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a;">ROI Rate</td>
+              <td style="padding: 12px; color: #0f172a;">${roi}%</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e5e7eb;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a;">Expected Return</td>
+              <td style="padding: 12px; color: #10b981; font-weight: bold;">$${expectedReturn}</td>
+            </tr>
+            <tr style="background: #f3f4f6;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a;">Duration</td>
+              <td style="padding: 12px; color: #0f172a;">${durationDays} days</td>
+            </tr>
+          </table>
+          
+          <p>Our team will review your investment and send you an approval email shortly. Returns will begin accruing immediately upon approval.</p>
+          
+          <p>Questions? Contact our support team.</p>
+          
+          <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #64748b; font-size: 12px;">
+            © ${new Date().getFullYear()} eToro Trust Capital. All rights reserved.
+          </p>
+        </div>
+      `;
+
+      const emailSent = await sendTransactionalEmail({
+        to: user.email,
+        toName: user.userName || user.name || 'User',
+        subject: 'Investment Request Received',
+        html: addEmailTranslationFeature(html)
+      });
+
+      console.log('User confirmation email sent:', emailSent);
+    } catch (emailErr) {
+      console.warn('⚠️ Failed to send user confirmation email:', emailErr);
+    }
+
+    console.log(`✅ Investment created: ID=${investment.id}, Amount=$${investmentAmount}, User=${user.email}`);
+
+    return res.status(201).json({
+      success: true,
+      message: 'Investment created successfully',
+      investment: {
+        id: investment.id,
+        plan: planName,
+        amount: investmentAmount,
+        roi: roi,
+        status: investment.status,
+        newBalance: newBalance
+      }
+    });
+
+  } catch (err) {
+    console.error('❌ Investment creation error:', err);
+    return res.status(500).json({ 
+      error: 'Server error creating investment',
+      message: err.message
+    });
+  }
+});
+
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server listening on http://localhost:${PORT}`);

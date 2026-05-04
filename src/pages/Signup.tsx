@@ -14,9 +14,6 @@ function Signup() {
     fullName: '',
     userName: '',
     phoneNumber: '',
-    country: '',
-    city: '',
-    address: '',
     password: '', 
     confirmPassword: '', 
     referralCode: '',
@@ -59,9 +56,6 @@ function Signup() {
         name: form.fullName,
         userName: form.userName,
         phoneNumber: form.phoneNumber,
-        country: form.country,
-        city: form.city,
-        address: form.address,
         referredByCode: form.referralCode || undefined,
       })
 
@@ -145,42 +139,6 @@ function Signup() {
               placeholder="Enter your phone number"
               value={form.phoneNumber}
               onChange={(e) => setForm((prev) => ({ ...prev, phoneNumber: e.target.value }))}
-              required
-            />
-          </div>
-
-          <div className="binance-form__group">
-            <label htmlFor="country">Country</label>
-            <input
-              id="country"
-              type="text"
-              placeholder="Enter your country"
-              value={form.country}
-              onChange={(e) => setForm((prev) => ({ ...prev, country: e.target.value }))}
-              required
-            />
-          </div>
-
-          <div className="binance-form__group">
-            <label htmlFor="city">City</label>
-            <input
-              id="city"
-              type="text"
-              placeholder="Enter your city"
-              value={form.city}
-              onChange={(e) => setForm((prev) => ({ ...prev, city: e.target.value }))}
-              required
-            />
-          </div>
-
-          <div className="binance-form__group">
-            <label htmlFor="address">Address</label>
-            <input
-              id="address"
-              type="text"
-              placeholder="Enter your address"
-              value={form.address}
-              onChange={(e) => setForm((prev) => ({ ...prev, address: e.target.value }))}
               required
             />
           </div>
