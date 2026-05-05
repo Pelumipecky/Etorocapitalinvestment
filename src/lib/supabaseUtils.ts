@@ -355,15 +355,17 @@ export const supabaseAuth = {
           })
 
           // Send referral notification to referrer
-          notifyBackend('/api/notify/referral-signup', {
-            referrerId: referrer.idnum,
-            referrerEmail: referrer.email,
-            referrerName: referrer.userName || referrer.name || referrer.email.split('@')[0],
-            newUserEmail: email,
-            newUserName: userData.userName || userData.name || email.split('@')[0],
-            referralBonus: referralBonus,
-            totalReferrals: newReferralCount,
-          })
+          if (referrer.email) {
+            notifyBackend('/api/notify/referral-signup', {
+              referrerId: referrer.idnum,
+              referrerEmail: referrer.email,
+              referrerName: referrer.userName || referrer.name || referrer.email.split('@')[0],
+              newUserEmail: email,
+              newUserName: userData.userName || userData.name || email.split('@')[0],
+              referralBonus: referralBonus,
+              totalReferrals: newReferralCount,
+            })
+          }
         }
       } catch (error) {
         console.warn('Referral tracking failed:', error)
