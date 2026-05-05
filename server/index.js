@@ -208,6 +208,60 @@ app.post('/api/notify/loan-request', async (req, res) => {
   }
 });
 
+// 8. Referral Signup (Referrer Notification)
+app.post('/api/notify/referral-signup', async (req, res) => {
+  try {
+    const { referrerId, referrerEmail, referrerName, newUserEmail, newUserName, referralBonus, totalReferrals } = req.body || {};
+    if (!referrerEmail) return res.status(400).json({ error: 'Missing referrer email' });
+
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #0f172a; border-bottom: 2px solid #f0b90b; padding-bottom: 10px;">New Referral Signup!</h2>
+        <p>Hi ${referrerName},</p>
+        <p>Great news! Someone has signed up using your referral code.</p>
+        
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0; border: 1px solid #e5e7eb;">
+          <tr style="background: #f3f4f6; border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 12px; font-weight: bold; color: #0f172a;">New User</td>
+            <td style="padding: 12px; color: #0f172a;">${newUserName}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 12px; font-weight: bold; color: #0f172a;">Email</td>
+            <td style="padding: 12px; color: #0f172a;">${newUserEmail}</td>
+          </tr>
+          <tr style="background: #f3f4f6; border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 12px; font-weight: bold; color: #0f172a;">Bonus Earned</td>
+            <td style="padding: 12px; color: #f0b90b; font-weight: bold;">$${Number(referralBonus || 0).toLocaleString()}</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-weight: bold; color: #0f172a;">Total Referrals</td>
+            <td style="padding: 12px; color: #0f172a; font-weight: bold;">${totalReferrals}</td>
+          </tr>
+        </table>
+        
+        <p>The referral bonus has been credited to your account. You can use these funds to invest or withdraw anytime.</p>
+        
+        <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #64748b; font-size: 12px;">
+          © ${new Date().getFullYear()} eToro Trust Capital. All rights reserved.
+        </p>
+      </div>
+    `;
+
+    const result = await sendTransactionalEmail({
+      to: referrerEmail,
+      toName: referrerName,
+      subject: `New Referral Signup - $${Number(referralBonus || 0)} Bonus Earned!`,
+      html: addEmailTranslationFeature(html)
+    });
+
+    if (result.sent) return res.json({ success: true });
+    return res.status(500).json({ error: 'Failed to send referral notification' });
+  } catch (error) {
+    console.error('Referral signup notification error:', error);
+    return res.status(500).json({ error: 'Failed to send referral notification' });
+  }
+});
+
 // Admin: Approve investment (server-side email, idempotent)
 app.post('/api/admin/investments/approve', async (req, res) => {
   try {

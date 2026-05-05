@@ -1,5 +1,5 @@
-import { FormEvent, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { FormEvent, useState, useEffect } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
 
 type Status =
@@ -22,8 +22,17 @@ function Signup() {
   })
   const [status, setStatus] = useState<Status>({ state: 'idle' })
   const [showPassword, setShowPassword] = useState(false)
+  const [searchParams] = useSearchParams()
   const { signup } = useAuth()
   const navigate = useNavigate()
+
+  // Read referral code from URL query parameter
+  useEffect(() => {
+    const refCode = searchParams.get('ref')
+    if (refCode) {
+      setForm((prev) => ({ ...prev, referralCode: refCode }))
+    }
+  }, [searchParams])
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()

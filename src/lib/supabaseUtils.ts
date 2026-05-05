@@ -317,6 +317,9 @@ export const supabaseAuth = {
     // Generate unique user ID
     const idnum = generateUserId()
 
+    // Generate referral code for this new user
+    const referralCode = randomReferralCode(userData.userName as string || '')
+
     // Create user record
     const newUser = await supabaseDb.createUser({
       idnum,
@@ -326,9 +329,47 @@ export const supabaseAuth = {
       bonus: 0,
       investmentCount: 0,
       referralCount: 0,
+      referralCode: referralCode,
+      referralCodeIssuedAt: new Date().toISOString(),
+      referralCodeExpiresAt: addDaysToNow(REFERRAL_DEFAULT_EXPIRATION_DAYS),
+      referredByCode: userData.referredByCode || null,
       role: 'user',
       ...userData,
     })
+
+    // Handle referral tracking
+    if (userData.referredByCode) {
+      try {
+        const referrer = await supabaseDb.getUserByReferralCode(userData.referredByCode)
+        
+        if (referrer && referrer.idnum) {
+          // Update referrer's referral count
+          const newReferralCount = (referrer.referralCount || 0) + 1
+          const referralBonus = 50 // $50 bonus per referral
+          const newBonusTotal = (referrer.referralBonusTotal || 0) + referralBonus
+          
+          await supabaseDb.updateUser(referrer.idnum, {
+            referralCount: newReferralCount,
+            referralBonusTotal: newBonusTotal,
+            bonus: (referrer.bonus || 0) + referralBonus,
+          })
+
+          // Send referral notification to referrer
+          notifyBackend('/api/notify/referral-signup', {
+            referrerId: referrer.idnum,
+            referrerEmail: referrer.email,
+            referrerName: referrer.userName || referrer.name || referrer.email.split('@')[0],
+            newUserEmail: email,
+            newUserName: userData.userName || userData.name || email.split('@')[0],
+            referralBonus: referralBonus,
+            totalReferrals: newReferralCount,
+          })
+        }
+      } catch (error) {
+        console.warn('Referral tracking failed:', error)
+        // Don't fail signup if referral processing fails
+      }
+    }
 
     // Send Welcome Email
     notifyBackend('/api/notify/welcome', { 
@@ -430,6 +471,20 @@ export const supabaseDb = {
       .from('users')
       .select('*')
       .eq('userName', userName)
+      .single()
+    
+    if (error) {
+      if (error.code === 'PGRST116') return null
+      throw error
+    }
+    return mapUserRecord(data)
+  },
+
+  async getUserByReferralCode(referralCode: string): Promise<UserRecord | null> {
+    const { data, error } = await db
+      .from('users')
+      .select('*')
+      .eq('referralCode', referralCode)
       .single()
     
     if (error) {
