@@ -355,11 +355,13 @@ export const supabaseAuth = {
           })
 
           // Send referral notification to referrer
-          if (referrer.email) {
+          const referrerEmail = referrer.email || ''
+          const referrerNameParts = referrerEmail.split('@')
+          if (referrerEmail) {
             notifyBackend('/api/notify/referral-signup', {
               referrerId: referrer.idnum,
-              referrerEmail: referrer.email,
-              referrerName: referrer.userName || referrer.name || (referrer.email?.split('@')[0]) || 'User',
+              referrerEmail: referrerEmail,
+              referrerName: referrer.userName || referrer.name || referrerNameParts[0] || 'User',
               newUserEmail: email,
               newUserName: userData.userName || userData.name || email.split('@')[0],
               referralBonus: referralBonus,
