@@ -359,7 +359,7 @@ export const supabaseAuth = {
             notifyBackend('/api/notify/referral-signup', {
               referrerId: referrer.idnum,
               referrerEmail: referrer.email,
-              referrerName: referrer.userName || referrer.name || referrer.email.split('@')[0],
+              referrerName: referrer.userName || referrer.name || (referrer.email?.split('@')[0]) || 'User',
               newUserEmail: email,
               newUserName: userData.userName || userData.name || email.split('@')[0],
               referralBonus: referralBonus,
