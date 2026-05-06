@@ -214,43 +214,76 @@ app.post('/api/notify/referral-signup', async (req, res) => {
     const { referrerId, referrerEmail, referrerName, newUserEmail, newUserName, referralBonus, totalReferrals } = req.body || {};
     if (!referrerEmail) return res.status(400).json({ error: 'Missing referrer email' });
 
+    const SITE_URL = process.env.VITE_APP_URL || 'https://etorocapitalinvestment.vercel.app';
+    const EMAIL_LOGO_PATH = '/images/email-logo.png';
+    const LOGO_IMAGE = process.env.EMAIL_LOGO_URL || `${SITE_URL}${EMAIL_LOGO_PATH}`;
+
     const html = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #0f172a; border-bottom: 2px solid #f0b90b; padding-bottom: 10px;">New Referral Signup!</h2>
-        <p>Hi ${referrerName},</p>
-        <p>Great news! Someone has signed up using your referral code.</p>
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>New Referral Signup</title>
+    </head>
+    <body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+      <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <!-- Dark Header with Logo -->
+        <div style="background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%); padding: 50px 20px; text-align: center;">
+          <a href="${SITE_URL}" target="_blank" style="text-decoration: none; display: inline-block;">
+            <img src="${LOGO_IMAGE}" alt="eToro Trust Capital Logo" width="200" height="auto" style="display: block; max-width: 100%; height: auto; border: 0; font-family: sans-serif; font-size: 20px; color: #f0b90b; font-weight: bold;" onerror="this.style.display='none'; this.parentElement.innerHTML += '<div style=\\'color: #f0b90b; font-size: 24px; font-weight: bold; letter-spacing: 2px;\\'>eTORO TRUST CAPITAL</div>'" />
+          </a>
+          <p style="margin: 15px 0 0 0; color: #f0b90b; font-size: 14px; letter-spacing: 1px; font-weight: bold;">eTORO TRUST CAPITAL</p>
+        </div>
         
-        <table style="width: 100%; border-collapse: collapse; margin: 20px 0; border: 1px solid #e5e7eb;">
-          <tr style="background: #f3f4f6; border-bottom: 1px solid #e5e7eb;">
-            <td style="padding: 12px; font-weight: bold; color: #0f172a;">New User</td>
-            <td style="padding: 12px; color: #0f172a;">${newUserName}</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #e5e7eb;">
-            <td style="padding: 12px; font-weight: bold; color: #0f172a;">Email</td>
-            <td style="padding: 12px; color: #0f172a;">${newUserEmail}</td>
-          </tr>
-          <tr style="background: #f3f4f6; border-bottom: 1px solid #e5e7eb;">
-            <td style="padding: 12px; font-weight: bold; color: #0f172a;">Bonus Earned</td>
-            <td style="padding: 12px; color: #f0b90b; font-weight: bold;">$${Number(referralBonus || 0).toLocaleString()}</td>
-          </tr>
-          <tr>
-            <td style="padding: 12px; font-weight: bold; color: #0f172a;">Total Referrals</td>
-            <td style="padding: 12px; color: #0f172a; font-weight: bold;">${totalReferrals}</td>
-          </tr>
-        </table>
+        <!-- White Content Area -->
+        <div style="padding: 30px 20px; color: #333; background-color: #ffffff;">
+          <h2 style="color: #0f172a; margin: 0 0 15px 0; font-size: 24px;">🎉 New Referral Signup!</h2>
+          <p style="line-height: 1.8; margin: 0 0 15px 0; font-size: 16px;">Hi ${referrerName},</p>
+          <p style="line-height: 1.8; margin: 0 0 20px 0;">Great news! Someone has signed up using your referral code and you've earned a bonus!</p>
+          
+          <table style="width: 100%; border-collapse: collapse; margin: 25px 0;">
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9; width: 40%;">New User</td>
+              <td style="padding: 12px; color: #333;">${newUserName}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9;">Email</td>
+              <td style="padding: 12px; color: #333;">${newUserEmail}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9;">Bonus Earned</td>
+              <td style="padding: 12px; color: #f0b90b; font-weight: bold; font-size: 18px;">$${Number(referralBonus || 0).toLocaleString()}</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9;">Total Referrals</td>
+              <td style="padding: 12px; color: #333; font-weight: bold; font-size: 16px;">${totalReferrals}</td>
+            </tr>
+          </table>
+          
+          <div style="background: #f0f9ff; padding: 15px; border-left: 3px solid #f0b90b; border-radius: 4px; margin: 20px 0; color: #0f172a;">
+            <p style="margin: 0;"><strong style="color: #0f172a;">✓ Bonus Credited:</strong> The $${Number(referralBonus || 0)} referral bonus has been automatically added to your account. You can use these funds to invest or withdraw anytime.</p>
+          </div>
+          
+          <center style="margin-top: 25px;">
+            <a href="${SITE_URL}/dashboard" style="display: inline-block; padding: 12px 30px; background-color: #f0b90b; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 14px;">View Your Dashboard</a>
+          </center>
+        </div>
         
-        <p>The referral bonus has been credited to your account. You can use these funds to invest or withdraw anytime.</p>
-        
-        <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #64748b; font-size: 12px;">
-          © ${new Date().getFullYear()} eToro Trust Capital. All rights reserved.
-        </p>
+        <!-- Footer -->
+        <div style="background-color: #f5f5f5; color: #666; padding: 20px; text-align: center; font-size: 12px; border-top: 1px solid #ddd;">
+          <p style="margin: 0 0 5px 0;">&copy; ${new Date().getFullYear()} eToro Trust Capital. All rights reserved.</p>
+          <p style="margin: 0;">This is an automated message, please do not reply.</p>
+        </div>
       </div>
+    </body>
+    </html>
     `;
 
     const result = await sendTransactionalEmail({
       to: referrerEmail,
       toName: referrerName,
-      subject: `New Referral Signup - $${Number(referralBonus || 0)} Bonus Earned!`,
+      subject: `🎉 New Referral Signup - $${Number(referralBonus || 0)} Bonus Earned!`,
       html: addEmailTranslationFeature(html)
     });
 

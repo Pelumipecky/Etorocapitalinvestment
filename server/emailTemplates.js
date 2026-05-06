@@ -6,20 +6,27 @@ const LOGO_IMAGE = process.env.EMAIL_LOGO_URL || `${SITE_URL}${EMAIL_LOGO_PATH}`
 const GOOGLE_TRANSLATE_URL = 'https://translate.google.com/?sl=en&tl=auto&op=translate';
 
 const styles = `
-  body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; background-color: #ffffff; margin: 0; padding: 0; }
-  .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #eee; }
-  .header { background-color: #ffffff; color: #0f172a; padding: 20px; text-align: center; }
-  .header h1 { margin: 0; font-size: 24px; }
-  .content { padding: 30px 20px; }
-  .footer { background-color: #ffffff; color: #666; padding: 20px; text-align: center; font-size: 12px; border-top: 1px solid #eee; }
-  .button { display: inline-block; padding: 10px 20px; background-color: #f0b90b; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 20px; }
-  .translate-box { margin: 24px 0 0; padding: 16px; text-align: center; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; }
-  .translate-box p { margin: 0 0 10px; color: #475569; font-size: 13px; }
-  .translate-link { display: inline-block; padding: 9px 16px; background: #ffffff; color: #0f172a; text-decoration: none; border: 1px solid #d1d5db; border-radius: 6px; font-weight: 600; font-size: 13px; }
+  body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f5f5f5; margin: 0; padding: 0; }
+  .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+  .header { background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%); color: #ffffff; padding: 50px 20px; text-align: center; }
+  .header img { max-width: 200px; height: auto; display: block; margin: 0 auto; }
+  .header p { margin: 15px 0 0 0; color: #f0b90b; font-size: 14px; letter-spacing: 1px; font-weight: bold; }
+  .content { padding: 30px 20px; color: #333; background-color: #ffffff; }
+  .content h2 { color: #0f172a; margin-top: 0; margin-bottom: 15px; }
+  .content p { line-height: 1.8; margin: 0 0 15px 0; }
+  .footer { background-color: #f5f5f5; color: #666; padding: 20px; text-align: center; font-size: 12px; border-top: 1px solid #ddd; }
+  .button { display: inline-block; padding: 12px 24px; background-color: #f0b90b; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 20px; border: none; cursor: pointer; }
+  .button:hover { background-color: #daa500; }
+  .translate-box { margin: 24px 0 0; padding: 16px; text-align: center; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; }
+  .translate-box p { margin: 0 0 10px; color: #666; font-size: 13px; }
+  .translate-link { display: inline-block; padding: 9px 16px; background: #ffffff; color: #0f172a; text-decoration: none; border: 2px solid #f0b90b; border-radius: 6px; font-weight: 600; font-size: 13px; }
   .info-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-  .info-table td { padding: 8px; border-bottom: 1px solid #eee; }
-  .info-table td:first-child { font-weight: bold; color: #555; width: 40%; }
+  .info-table td { padding: 12px; border-bottom: 1px solid #eee; }
+  .info-table td:first-child { font-weight: bold; color: #0f172a; width: 40%; background-color: #f9f9f9; }
+  .info-table tr:nth-child(even) td:first-child { background-color: #f9f9f9; }
   .highlight { color: #f0b90b; font-weight: bold; }
+  ul { color: #333; }
+  ul li { margin-bottom: 10px; line-height: 1.6; }
 `;
 
 const wrapTemplate = (title, bodyContent) => `
@@ -27,31 +34,39 @@ const wrapTemplate = (title, bodyContent) => `
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title}</title>
   <style>${styles}</style>
 </head>
-<body>
-  <div class="container">
-    <div class="header" style="text-align: center; padding: 25px 0; background-color: #ffffff;">
-      <!-- Logo Image (Remote URL) -->
-      <a href="${SITE_URL}" target="_blank" style="text-decoration: none;">
-        <img src="${LOGO_IMAGE}" alt="eToro Trust Capital" width="180" style="display: inline-block; max-width: 100%; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #0f172a; font-weight: bold;" />
+<body style="margin: 0; padding: 0; background-color: #f5f5f5;">
+  <div class="container" style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <!-- Dark Header with Logo -->
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%); padding: 50px 20px; text-align: center;">
+      <a href="${SITE_URL}" target="_blank" style="text-decoration: none; display: inline-block;">
+        <img src="${LOGO_IMAGE}" alt="eToro Trust Capital Logo" width="200" height="auto" style="display: block; max-width: 100%; height: auto; border: 0; font-family: sans-serif; font-size: 20px; color: #f0b90b; font-weight: bold;" onerror="this.style.display='none'; this.parentElement.innerHTML += '<div style=\\'color: #f0b90b; font-size: 24px; font-weight: bold; letter-spacing: 2px;\\'>eTORO TRUST CAPITAL</div>'" />
       </a>
+      <p style="margin: 15px 0 0 0; color: #f0b90b; font-size: 14px; letter-spacing: 1px; font-weight: bold;">eTORO TRUST CAPITAL</p>
     </div>
-    <div class="content">
+    
+    <!-- White Content Area -->
+    <div style="padding: 30px 20px; color: #333; background-color: #ffffff;">
       ${bodyContent}
-      <div class="translate-box">
-        <p>Need this notification in another language?</p>
-        <a href="${GOOGLE_TRANSLATE_URL}" class="translate-link" target="_blank">Open Google Translate</a>
+      <div style="margin: 24px 0 0; padding: 16px; text-align: center; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">
+        <p style="margin: 0 0 10px; color: #666; font-size: 13px;">Need this notification in another language?</p>
+        <a href="${GOOGLE_TRANSLATE_URL}" target="_blank" style="display: inline-block; padding: 9px 16px; background: #ffffff; color: #0f172a; text-decoration: none; border: 2px solid #f0b90b; border-radius: 6px; font-weight: 600; font-size: 13px;">Open Google Translate</a>
       </div>
     </div>
-    <div class="footer">
-      <p>&copy; ${new Date().getFullYear()} eToro Trust Capital. All rights reserved.</p>
-      <p>This is an automated message, please do not reply.</p>
+    
+    <!-- Footer -->
+    <div style="background-color: #f5f5f5; color: #666; padding: 20px; text-align: center; font-size: 12px; border-top: 1px solid #ddd;">
+      <p style="margin: 0 0 5px 0;">&copy; ${new Date().getFullYear()} eToro Trust Capital. All rights reserved.</p>
+      <p style="margin: 0;">This is an automated message, please do not reply.</p>
     </div>
   </div>
 </body>
 </html>
+`;
+      ${bodyContent}
 `;
 
 module.exports = {
