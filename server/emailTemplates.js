@@ -15,7 +15,10 @@ const styles = `
   .content { padding: 30px 20px; color: #333; background-color: #ffffff; }
   .content h2 { color: #0f172a; margin-top: 0; margin-bottom: 15px; }
   .content p { line-height: 1.8; margin: 0 0 15px 0; }
-  .footer { background-color: #f5f5f5; color: #666; padding: 20px; text-align: center; font-size: 12px; border-top: 1px solid #ddd; }
+  .footer { background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); color: #666; padding: 30px 20px; text-align: center; font-size: 11px; border-top: 2px solid #f0b90b; }
+  .footer-divider { height: 1px; background: #ddd; margin: 15px 0; }
+  .footer-confidential { background: #fef3c7; color: #92400e; padding: 12px 15px; border-radius: 6px; margin: 15px 0; border-left: 3px solid #f0b90b; font-weight: 600; font-size: 10px; }
+  .footer-privacy { color: #9ca3af; font-size: 10px; margin: 10px 0; font-style: italic; }
   .button { display: inline-block; padding: 12px 24px; background-color: #f0b90b; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 20px; border: none; cursor: pointer; }
   .button:hover { background-color: #daa500; }
   .translate-box { margin: 24px 0 0; padding: 16px; text-align: center; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; }
@@ -59,9 +62,16 @@ const wrapTemplate = (title, bodyContent) => `
     </div>
     
     <!-- Footer -->
-    <div style="background-color: #f5f5f5; color: #666; padding: 20px; text-align: center; font-size: 12px; border-top: 1px solid #ddd;">
+    <div style="background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); color: #666; padding: 30px 20px; text-align: center; font-size: 11px; border-top: 2px solid #f0b90b;">
       <p style="margin: 0 0 5px 0;">&copy; ${new Date().getFullYear()} eToro Trust Capital. All rights reserved.</p>
-      <p style="margin: 0;">This is an automated message, please do not reply.</p>
+      <div style="height: 1px; background: #ddd; margin: 15px 0;"></div>
+      <div style="background: #fef3c7; color: #92400e; padding: 12px 15px; border-radius: 6px; margin: 15px 0; border-left: 3px solid #f0b90b; font-weight: 600; font-size: 10px;">
+        🔒 CONFIDENTIAL: This email contains confidential and privileged information intended solely for the use of the addressee. If you are not the intended recipient, you are hereby notified that any dissemination, distribution, or copying of this email is strictly prohibited.
+      </div>
+      <div style="color: #9ca3af; font-size: 10px; margin: 10px 0; font-style: italic;">
+        ⚠️ PRIVACY & SECURITY: Do not share this email or your account credentials with anyone. eToro Trust Capital staff will never ask for your password or sensitive information via email.
+      </div>
+      <p style="margin: 10px 0 0 0; font-size: 11px;">This is an automated message, please do not reply to this email directly.</p>
     </div>
   </div>
 </body>

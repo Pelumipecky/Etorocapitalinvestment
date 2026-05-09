@@ -879,7 +879,7 @@ function generateEmailHTML(notification: EmailNotification & { message: string }
 
               <!-- Footer -->
               <tr>
-                <td style="background-color: ${PRIMARY_COLOR}; padding: 30px; text-align: center; border-top: 1px solid rgba(240, 185, 11, 0.1);">
+                <td style="background: linear-gradient(180deg, ${PRIMARY_COLOR} 0%, #f8fafc 100%); padding: 30px; text-align: center; border-top: 2px solid ${ACCENT_COLOR};">
                   <!-- Social Links -->
                   <div style="margin: 0 0 20px 0;">
                     <a href="https://twitter.com/etorotrust" style="display: inline-block; margin: 0 10px; text-decoration: none;">
@@ -888,15 +888,26 @@ function generateEmailHTML(notification: EmailNotification & { message: string }
                     <a href="https://discord.gg/etorotrust" style="display: inline-block; margin: 0 10px; text-decoration: none;">
                       <span style="color: ${ACCENT_COLOR}; font-size: 18px;">💬</span>
                     </a>
-                    <!-- Support link removed
-                      <span style="color: ${ACCENT_COLOR}; font-size: 18px;">✈️</span>
-                    -->
                   </div>
+
+                  <!-- Divider -->
+                  <div style="height: 1px; background: rgba(240, 185, 11, 0.2); margin: 15px 0;"></div>
 
                   <p style="margin: 0 0 10px 0; color: ${TEXT_SECONDARY}; font-size: 13px;">
                     © ${new Date().getFullYear()} eToro Trust Capital. All rights reserved.
                   </p>
-                  <p style="margin: 0; color: ${TEXT_SECONDARY}; font-size: 12px;">
+
+                  <!-- Confidential Notice -->
+                  <div style="background: #fef3c7; color: #92400e; padding: 12px 15px; border-radius: 6px; margin: 15px 0; border-left: 3px solid ${ACCENT_COLOR}; font-weight: 600; font-size: 10px; line-height: 1.6;">
+                    🔒 <strong>CONFIDENTIAL:</strong> This email contains confidential and privileged information intended solely for the use of the addressee. If you are not the intended recipient, you are hereby notified that any dissemination, distribution, or copying of this email is strictly prohibited.
+                  </div>
+
+                  <!-- Privacy Warning -->
+                  <div style="color: #9ca3af; font-size: 10px; margin: 10px 0; font-style: italic; line-height: 1.6;">
+                    ⚠️ <strong>PRIVACY & SECURITY:</strong> Do not share this email or your account credentials with anyone. eToro Trust Capital staff will never ask for your password or sensitive information via email.
+                  </div>
+
+                  <p style="margin: 10px 0 0 0; color: ${TEXT_SECONDARY}; font-size: 11px;">
                     This is an automated notification. Please do not reply to this email.
                   </p>
                 </td>
