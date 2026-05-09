@@ -154,7 +154,7 @@ export async function sendInvestmentNotification(
   <div class="container">
     <div class="header" style="text-align: center; padding: 25px 0;">
       <a href="${APP_URL}" target="_blank" style="text-decoration: none;">
-        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="200" style="display: inline-block; max-width: 100%; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
+        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="120" style="display: inline-block; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
       </a>
     </div>
     <div class="content">
@@ -305,7 +305,7 @@ export async function sendDepositNotification(
   <div class="container">
     <div class="header" style="text-align: center; padding: 25px 0;">
       <a href="${APP_URL}" target="_blank" style="text-decoration: none;">
-        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="200" style="display: inline-block; max-width: 100%; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
+        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="120" style="display: inline-block; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
       </a>
     </div>
     <div class="content">
@@ -357,7 +357,7 @@ export async function sendDepositNotification(
   <div class="container">
     <div class="header" style="text-align: center; padding: 25px 0;">
       <a href="${APP_URL}" target="_blank" style="text-decoration: none;">
-        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="200" style="display: inline-block; max-width: 100%; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
+        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="120" style="display: inline-block; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
       </a>
     </div>
     <div class="content">
@@ -408,7 +408,7 @@ export async function sendDepositNotification(
   <div class="container">
     <div class="header" style="text-align: center; padding: 25px 0;">
       <a href="${APP_URL}" target="_blank" style="text-decoration: none;">
-        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="200" style="display: inline-block; max-width: 100%; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
+        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="120" style="display: inline-block; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
       </a>
     </div>
     <div class="content">
@@ -567,7 +567,7 @@ export async function sendLoanNotification(
   <div class="container">
     <div class="header" style="text-align: center; padding: 25px 0;">
       <a href="${APP_URL}" target="_blank" style="text-decoration: none;">
-        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="200" style="display: inline-block; max-width: 100%; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
+        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="120" style="display: inline-block; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
       </a>
     </div>
     <div class="content">
@@ -618,7 +618,7 @@ export async function sendLoanNotification(
   <div class="container">
     <div class="header" style="text-align: center; padding: 25px 0;">
       <a href="${APP_URL}" target="_blank" style="text-decoration: none;">
-        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="200" style="display: inline-block; max-width: 100%; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
+        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="120" style="display: inline-block; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
       </a>
     </div>
     <div class="content">
@@ -669,7 +669,7 @@ export async function sendLoanNotification(
   <div class="container">
     <div class="header" style="text-align: center; padding: 25px 0;">
       <a href="${APP_URL}" target="_blank" style="text-decoration: none;">
-        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="200" style="display: inline-block; max-width: 100%; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
+        <img src="${LOGO_URL}" alt="eToro Trust Capital" width="120" style="display: inline-block; height: auto; border: 0; font-family: sans-serif; font-size: 24px; color: #f0b90b; font-weight: bold;" />
       </a>
     </div>
     <div class="content">
@@ -838,8 +838,8 @@ function generateEmailHTML(notification: EmailNotification & { message: string }
               
               <!-- Header with Logo -->
               <tr>
-                <td style="background: #ffffff; padding: 40px 30px; text-align: center; border-bottom: 3px solid ${ACCENT_COLOR};">
-                  <img src="${LOGO_URL}" alt="eToro Trust Capital" style="width: 180px; height: auto; margin: 0; display: block; margin-bottom: 15px;" />
+                <td style="background: #ffffff; padding: 30px 30px 25px; text-align: center; border-bottom: 3px solid ${ACCENT_COLOR};">
+                  <img src="${LOGO_URL}" alt="eToro Trust Capital" style="width: 120px; height: auto; margin: 0; display: block; margin-bottom: 12px;" />
                   <h1 style="margin: 0; color: ${TEXT_PRIMARY}; font-size: 28px; font-weight: 700; letter-spacing: 0.5px;">
                     ${iconMap[notification.type]} ${notification.subject.split(' - ')[0]}
                   </h1>
@@ -909,4 +909,5 @@ function generateEmailHTML(notification: EmailNotification & { message: string }
     </html>
   `;
 }
+
 

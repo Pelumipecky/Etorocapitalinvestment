@@ -9,8 +9,8 @@ const GOOGLE_TRANSLATE_URL = 'https://translate.google.com/?sl=en&tl=auto&op=tra
 const styles = `
   body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f5f5f5; margin: 0; padding: 0; }
   .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-  .header { background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%); color: #ffffff; padding: 50px 20px; text-align: center; }
-  .header img { max-width: 200px; height: auto; display: block; margin: 0 auto; }
+  .header { background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%); color: #ffffff; padding: 35px 20px; text-align: center; }
+  .header img { width: 120px; height: auto; display: block; margin: 0 auto; }
   .header p { margin: 15px 0 0 0; color: #f0b90b; font-size: 14px; letter-spacing: 1px; font-weight: bold; }
   .content { padding: 30px 20px; color: #333; background-color: #ffffff; }
   .content h2 { color: #0f172a; margin-top: 0; margin-bottom: 15px; }
@@ -42,9 +42,9 @@ const wrapTemplate = (title, bodyContent) => `
 <body style="margin: 0; padding: 0; background-color: #f5f5f5;">
   <div class="container" style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
     <!-- Dark Header with Logo -->
-    <div style="background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%); padding: 50px 20px; text-align: center;">
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%); padding: 35px 20px; text-align: center;">
       <a href="${SITE_URL}" target="_blank" style="text-decoration: none; display: inline-block;">
-        <img src="${LOGO_IMAGE}" alt="eToro Trust Capital Logo" width="200" height="auto" style="display: block; max-width: 100%; height: auto; border: 0; font-family: sans-serif; font-size: 20px; color: #f0b90b; font-weight: bold;" onerror="this.style.display='none'; this.parentElement.innerHTML += '<div style=\\'color: #f0b90b; font-size: 24px; font-weight: bold; letter-spacing: 2px;\\'>eTORO TRUST CAPITAL</div>'" />
+        <img src="${LOGO_IMAGE}" alt="eToro Trust Capital Logo" width="120" height="auto" style="display: block; height: auto; border: 0; font-family: sans-serif; font-size: 20px; color: #f0b90b; font-weight: bold;" onerror="this.style.display='none'; this.parentElement.innerHTML += '<div style=\'color: #f0b90b; font-size: 24px; font-weight: bold; letter-spacing: 2px;\'>eTORO TRUST CAPITAL</div>'" />
       </a>
       <p style="margin: 15px 0 0 0; color: #f0b90b; font-size: 14px; letter-spacing: 1px; font-weight: bold;">eTORO TRUST CAPITAL</p>
     </div>

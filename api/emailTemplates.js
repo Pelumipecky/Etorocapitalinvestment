@@ -8,9 +8,9 @@ const styles = `
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #2c3e50; background-color: #ffffff; margin: 0; padding: 0; }
   .container { max-width: 650px; margin: 15px auto; background: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #e5e7eb; }
-  .header { background: #ffffff; padding: 40px 20px 25px; text-align: center; position: relative; }
-  .header-logo { display: inline-block; margin-bottom: 15px; }
-  .header-logo img { max-width: 180px; height: auto; border: 0; }
+  .header { background: #ffffff; padding: 30px 20px 20px; text-align: center; position: relative; }
+  .header-logo { display: inline-block; margin-bottom: 12px; }
+  .header-logo img { width: 120px; height: auto; border: 0; display: block; }
   .header h1 { margin: 15px 0 0 0; font-size: 28px; color: #0f172a; font-weight: 600; letter-spacing: 0.5px; }
   .header-divider { height: 3px; background: #f0b90b; margin-top: 15px; }
   .content { padding: 40px 30px; }
@@ -53,8 +53,8 @@ const wrapTemplate = (title, bodyContent) => `
   <div class="container">
     <div class="header">
       <div class="header-logo">
-        <a href="${SITE_URL}" target="_blank" style="text-decoration: none;">
-          <img src="${LOGO_IMAGE}" alt="eToro Trust Capital" style="display: block; max-width: 100%; height: auto; border: 0;" />
+        <a href="${SITE_URL}" target="_blank" style="text-decoration: none; display: inline-block;">
+          <img src="${LOGO_IMAGE}" alt="eToro Trust Capital" style="width: 120px; height: auto; border: 0; display: block;" />
         </a>
       </div>
       <h1>${title}</h1>
