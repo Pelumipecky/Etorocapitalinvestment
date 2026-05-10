@@ -10,7 +10,7 @@ const styles = `
   .container { max-width: 650px; margin: 15px auto; background: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #e5e7eb; }
   .header { background: #ffffff; padding: 30px 20px 20px; text-align: center; position: relative; }
   .header-logo { display: inline-block; margin-bottom: 12px; }
-  .header-logo img { width: 120px; height: auto; border: 0; display: block; }
+  .header-logo img { width: 160px; height: auto; border: 0; display: block; }
   .header h1 { margin: 15px 0 0 0; font-size: 28px; color: #0f172a; font-weight: 600; letter-spacing: 0.5px; }
   .header-divider { height: 3px; background: #f0b90b; margin-top: 15px; }
   .content { padding: 40px 30px; }
@@ -57,7 +57,7 @@ const wrapTemplate = (title, bodyContent) => `
     <div class="header">
       <div class="header-logo">
         <a href="${SITE_URL}" target="_blank" style="text-decoration: none; display: inline-block;">
-          <img src="${LOGO_IMAGE}" alt="eToro Trust Capital" style="width: 120px; height: auto; border: 0; display: block;" />
+          <img src="${LOGO_IMAGE}" alt="eToro Trust Capital" style="width: 160px; height: auto; border: 0; display: block;" />
         </a>
       </div>
       <h1>${title}</h1>
@@ -74,10 +74,10 @@ const wrapTemplate = (title, bodyContent) => `
       <p>&copy; ${new Date().getFullYear()} eToro Trust Capital. All rights reserved.</p>
       <div class="footer-divider"></div>
       <div class="footer-confidential">
-        🔒 CONFIDENTIAL: This email contains confidential and privileged information intended solely for the use of the addressee. If you are not the intended recipient, you are hereby notified that any dissemination, distribution, or copying of this email is strictly prohibited.
+        CONFIDENTIAL: This email contains confidential and privileged information intended solely for the use of the addressee. If you are not the intended recipient, you are hereby notified that any dissemination, distribution, or copying of this email is strictly prohibited.
       </div>
       <div class="footer-privacy">
-        ⚠️ PRIVACY & SECURITY: Do not share this email or your account credentials with anyone. eToro Trust Capital staff will never ask for your password or sensitive information via email.
+        PRIVACY & SECURITY: Do not share this email or your account credentials with anyone. eToro Trust Capital staff will never ask for your password or sensitive information via email.
       </div>
       <p class="small-text">This is an automated message, please do not reply to this email directly.</p>
     </div>
@@ -103,14 +103,15 @@ export default {
   depositRequestUser: (name, amount, method, currency, txHash) => wrapTemplate('Deposit Confirmation', `
     <h2>Deposit Request Received</h2>
     <p>Hello ${name},</p>
-    <p>We have received your deposit request. It is currently <strong>Pending</strong> waiting for blockchain confirmation and admin approval.</p>
+    <p>We have received your deposit request. It is currently <strong>Pending</strong> waiting for blockchain confirmation and admin review.</p>
+    <p style="background-color: #f3f4f6; padding: 15px; border-radius: 6px; border-left: 3px solid #f0b90b; margin: 15px 0;"><strong>Important:</strong> Your deposit will be reviewed by our team before final approval. Please allow 24-48 hours for processing.</p>
     <table class="info-table">
       <tr><td>Amount:</td><td>$${amount}</td></tr>
       <tr><td>Method:</td><td>${method} ${currency ? `(${currency})` : ''}</td></tr>
       ${txHash ? `<tr><td>Transaction Hash:</td><td><small>${txHash.substring(0, 20)}...</small></td></tr>` : ''}
-      <tr><td>Status:</td><td>Pending</td></tr>
+      <tr><td>Status:</td><td>Pending Review</td></tr>
     </table>
-    <p>You will receive another email once your deposit is approved.</p>
+    <p>You will receive another email once your deposit is approved by our team.</p>
   `),
 
   depositRequestAdmin: (userName, amount, method, txHash, proofUrl) => wrapTemplate('New Deposit Request', `
@@ -130,7 +131,7 @@ export default {
   depositApproved: (name, amount) => wrapTemplate('Deposit Approved', `
     <div class="section">
       <p>Hello <strong>${name}</strong>,</p>
-      <p>✅ Great news! Your deposit of <span class="highlight">$${amount}</span> has been successfully approved and credited to your account balance.</p>
+      <p>Your deposit of <span class="highlight">$${amount}</span> has been successfully approved and credited to your account balance.</p>
     </div>
     
     <div class="section">
@@ -168,7 +169,7 @@ export default {
   roiCredited: (name, planName, amount, newBalance, date) => wrapTemplate('Daily ROI Credited', `
     <div class="section">
       <p>Hello <strong>${name}</strong>,</p>
-      <p>💰 Your daily ROI has been credited! Keep your investment active to continue earning.</p>
+      <p>Your daily ROI has been credited! Keep your investment active to continue earning.</p>
     </div>
     
     <div class="section">
@@ -273,7 +274,7 @@ export default {
         </tr>
         <tr>
           <td>Status</td>
-          <td><span class="status-pending">⏳ Pending Approval</span></td>
+          <td><span class="status-pending">Pending Approval</span></td>
         </tr>
       </table>
     </div>
@@ -287,7 +288,7 @@ export default {
   investmentApproved: (name, details) => wrapTemplate('Investment Approved', `
     <div class="section">
       <p>Hello <strong>${name}</strong>,</p>
-      <p>🎉 Great news! Your investment has been reviewed and is now <span class="status-active">ACTIVE</span>.</p>
+      <p>Your investment has been reviewed and is now <span class="status-active">ACTIVE</span>.</p>
     </div>
     
     <div class="section">
@@ -327,7 +328,7 @@ export default {
   investmentCompleted: (name, planName, totalROI, bonusAmount, currentBalance) => wrapTemplate('Investment Completed', `
     <div class="section">
       <p>Hello <strong>${name}</strong>,</p>
-      <p>🎉 Your <strong>${planName}</strong> investment plan has completed successfully.</p>
+      <p>Your <strong>${planName}</strong> investment plan has completed successfully.</p>
     </div>
 
     <div class="section">
@@ -361,7 +362,7 @@ export default {
   withdrawalApproved: (name, amount, method, wallet) => wrapTemplate('Withdrawal Approved', `
     <div class="section">
       <p>Hello <strong>${name}</strong>,</p>
-      <p>✅ Your withdrawal request for <span class="highlight">$${amount}</span> has been approved and processed.</p>
+      <p>Your withdrawal request for <span class="highlight">$${amount}</span> has been approved and processed.</p>
     </div>
 
     <div class="section">

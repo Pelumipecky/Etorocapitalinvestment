@@ -58,7 +58,7 @@ export async function sendEmailNotification(notification: EmailNotification): Pr
     // Check if email notifications are enabled
     const emailEnabled = import.meta.env.VITE_EMAIL_NOTIFICATIONS_ENABLED === 'true';
     
-    console.log('📧 sendEmailNotification called:', {
+    console.log('[EMAIL] sendEmailNotification called:', {
       to: notification.to_email,
       subject: notification.subject,
       hasHtml: !!notification.html,
@@ -68,7 +68,7 @@ export async function sendEmailNotification(notification: EmailNotification): Pr
     });
     
     if (!emailEnabled) {
-      console.log('📧 Email notifications disabled. Would have sent to:', notification.to_email);
+      console.log('[EMAIL] Email notifications disabled. Would have sent to:', notification.to_email);
       return true; // Return success but don't actually send
     }
 
@@ -77,7 +77,7 @@ export async function sendEmailNotification(notification: EmailNotification): Pr
       (notification.message ? generateEmailHTML({ ...notification, message: notification.message }) : '');
     
     if (!htmlContent) {
-      console.error('❌ No HTML content or message provided for email');
+      console.error('[EMAIL] No HTML content or message provided for email');
       return false;
     }
 
@@ -86,7 +86,7 @@ export async function sendEmailNotification(notification: EmailNotification): Pr
       ? API_EMAIL_ENDPOINT
       : `${getApiBaseUrl()}${API_EMAIL_ENDPOINT}`;
 
-    console.log('📤 Posting to API endpoint:', emailEndpoint);
+    console.log('[EMAIL] Posting to API endpoint:', emailEndpoint);
     const response = await fetch(emailEndpoint, {
       method: 'POST',
       headers: {
@@ -104,10 +104,10 @@ export async function sendEmailNotification(notification: EmailNotification): Pr
     }
 
     const result = await response.json();
-    console.log('✅ Email sent via API to:', notification.to_email, '- Result:', result);
+    console.log('[EMAIL] Email sent via API to:', notification.to_email, '- Result:', result);
     return true;
   } catch (error) {
-    console.error('❌ Failed to send email notification:', error);
+    console.error('[EMAIL] Failed to send email notification:', error);
     return false;
   }
 }
@@ -129,7 +129,7 @@ export async function sendInvestmentNotification(
   
   const statusMessages = {
     approved: {
-      subject: '✅ Investment Approved - eToro Trust Capital',
+      subject: 'Investment Approved - eToro Trust Capital',
       html: `
 <!DOCTYPE html>
 <html>
@@ -183,12 +183,12 @@ export async function sendInvestmentNotification(
       type: 'success' as const,
     },
     rejected: {
-      subject: '❌ Investment Update - eToro Trust Capital',
+      subject: 'Investment Update - eToro Trust Capital',
       message: `Your investment request of $${amount.toLocaleString()} for the ${plan} plan has been reviewed. Please contact support for more details.`,
       type: 'error' as const,
     },
     pending: {
-      subject: '⏳ Investment Received - eToro Trust Capital',
+      subject: 'Investment Received - Pending Review - eToro Trust Capital',
       html: `
 <!DOCTYPE html>
 <html>
@@ -280,7 +280,7 @@ export async function sendDepositNotification(
 ): Promise<boolean> {
   const statusMessages = {
     approved: {
-      subject: '✅ Deposit Approved - eToro Trust Capital',
+      subject: 'Deposit Approved - eToro Trust Capital',
       html: `
 <!DOCTYPE html>
 <html>
@@ -332,7 +332,7 @@ export async function sendDepositNotification(
       type: 'success' as const,
     },
     rejected: {
-      subject: '❌ Deposit Update - eToro Trust Capital',
+      subject: 'Deposit Update - eToro Trust Capital',
       html: `
 <!DOCTYPE html>
 <html>
@@ -383,7 +383,7 @@ export async function sendDepositNotification(
       type: 'error' as const,
     },
     pending: {
-      subject: '⏳ Deposit Received - eToro Trust Capital',
+      subject: 'Deposit Received - Under Review - eToro Trust Capital',
       html: `
 <!DOCTYPE html>
 <html>
@@ -418,7 +418,7 @@ export async function sendDepositNotification(
       <table class="info-table">
         <tr><td>Amount:</td><td class="highlight">$${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td></tr>
         <tr><td>Method:</td><td>${method}</td></tr>
-        <tr><td>Status:</td><td style="color: #f59e0b;">⏳ Pending Verification</td></tr>
+        <tr><td>Status:</td><td style="color: #f59e0b;">Pending Verification</td></tr>
         <tr><td>Expected Duration:</td><td>24-48 hours</td></tr>
       </table>
       <p style="background-color: #f3f4f6; padding: 15px; border-radius: 5px; margin: 20px 0;">
@@ -466,17 +466,17 @@ export async function sendWithdrawalNotification(
 ): Promise<boolean> {
   const statusMessages = {
     approved: {
-      subject: '✅ Withdrawal Approved - eToro Trust Capital',
+      subject: 'Withdrawal Approved - eToro Trust Capital',
       message: `Your withdrawal request of $${amount.toLocaleString()} via ${method} has been approved and processed. Funds should arrive within 1-3 business days.`,
       type: 'success' as const,
     },
     rejected: {
-      subject: '❌ Withdrawal Update - eToro Trust Capital',
+      subject: 'Withdrawal Update - eToro Trust Capital',
       message: `Your withdrawal request of $${amount.toLocaleString()} could not be processed. Please contact support for assistance.`,
       type: 'error' as const,
     },
     pending: {
-      subject: '⏳ Withdrawal Request Received - eToro Trust Capital',
+      subject: 'Withdrawal Request Received - Pending Review - eToro Trust Capital',
       message: `We've received your withdrawal request of $${amount.toLocaleString()} via ${method}. Our team is processing it and will notify you once completed.`,
       type: 'info' as const,
     },
@@ -503,17 +503,17 @@ export async function sendKYCNotification(
 ): Promise<boolean> {
   const statusMessages = {
     approved: {
-      subject: '✅ KYC Verified - eToro Trust Capital',
+      subject: 'KYC Verified - eToro Trust Capital',
       message: `Congratulations! Your identity verification has been completed successfully. You now have full access to all eToro Trust Capital features.`,
       type: 'success' as const,
     },
     rejected: {
-      subject: '❌ KYC Verification Update - eToro Trust Capital',
+      subject: 'KYC Verification Update - eToro Trust Capital',
       message: `Your KYC verification could not be completed. Please resubmit your documents or contact support for assistance.`,
       type: 'error' as const,
     },
     pending: {
-      subject: '⏳ KYC Submitted - eToro Trust Capital',
+      subject: 'KYC Submitted - Under Review - eToro Trust Capital',
       message: `We've received your KYC documents and are currently reviewing them. This typically takes 24-48 hours. We'll notify you once complete.`,
       type: 'info' as const,
     },
@@ -542,7 +542,7 @@ export async function sendLoanNotification(
 ): Promise<boolean> {
   const statusMessages = {
     approved: {
-      subject: '✅ Loan Approved - eToro Trust Capital',
+      subject: 'Loan Approved - eToro Trust Capital',
       html: `
 <!DOCTYPE html>
 <html>
@@ -593,7 +593,7 @@ export async function sendLoanNotification(
       type: 'success' as const,
     },
     rejected: {
-      subject: '❌ Loan Application Update - eToro Trust Capital',
+      subject: 'Loan Application Update - eToro Trust Capital',
       html: `
 <!DOCTYPE html>
 <html>
@@ -644,7 +644,7 @@ export async function sendLoanNotification(
       type: 'error' as const,
     },
     pending: {
-      subject: '⏳ Loan Application Received - eToro Trust Capital',
+      subject: 'Loan Application Received - Under Review - eToro Trust Capital',
       html: `
 <!DOCTYPE html>
 <html>
@@ -722,7 +722,7 @@ export async function sendBalanceUpdateNotification(
   return sendEmailNotification({
     to_email: userEmail,
     to_name: userName,
-    subject: '💰 Balance Update - eToro Trust Capital',
+    subject: 'Balance Update - eToro Trust Capital',
     message: `Your account balance has been ${changeType} by $${Math.abs(difference).toLocaleString()}. New balance: $${newBalance.toLocaleString()}`,
     type: 'info',
   });
@@ -742,7 +742,7 @@ export async function sendROINotification(
   return sendEmailNotification({
     to_email: userEmail,
     to_name: userName,
-    subject: '💰 Daily ROI Credited - eToro Trust Capital',
+    subject: 'Daily ROI Credited - eToro Trust Capital',
     message: `Great news! Your daily ROI of $${roiAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} from the ${investmentPlan} has been credited to your account. Total earnings so far: $${totalEarnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}. Current balance: $${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
     type: 'success',
   });
@@ -780,7 +780,7 @@ export async function sendWelcomeEmail(
   return sendEmailNotification({
     to_email: userEmail,
     to_name: userName,
-    subject: '🎉 Welcome to eToro Trust Capital!',
+    subject: 'Welcome to eToro Trust Capital!',
     message: `Welcome to eToro Trust Capital, ${userName}! We're excited to have you join our investment platform. Start exploring our investment plans and grow your wealth with us.`,
     type: 'success',
   });
@@ -791,10 +791,10 @@ export async function sendWelcomeEmail(
  */
 function generateEmailHTML(notification: EmailNotification & { message: string }): string {
   const iconMap = {
-    success: '✅',
-    error: '❌',
-    warning: '⚠️',
-    info: 'ℹ️',
+    success: '[SUCCESS]',
+    error: '[ERROR]',
+    warning: '[WARNING]',
+    info: '[INFO]',
   };
 
   const colorMap = {
@@ -839,7 +839,7 @@ function generateEmailHTML(notification: EmailNotification & { message: string }
               <!-- Header with Logo -->
               <tr>
                 <td style="background: #ffffff; padding: 30px 30px 25px; text-align: center; border-bottom: 3px solid ${ACCENT_COLOR};">
-                  <img src="${LOGO_URL}" alt="eToro Trust Capital" style="width: 120px; height: auto; margin: 0; display: block; margin-bottom: 12px;" />
+                  <img src="${LOGO_URL}" alt="eToro Trust Capital" style="width: 160px; height: auto; margin: 0; display: block; margin-bottom: 12px;" />
                   <h1 style="margin: 0; color: ${TEXT_PRIMARY}; font-size: 28px; font-weight: 700; letter-spacing: 0.5px;">
                     ${iconMap[notification.type]} ${notification.subject.split(' - ')[0]}
                   </h1>
@@ -899,12 +899,12 @@ function generateEmailHTML(notification: EmailNotification & { message: string }
 
                   <!-- Confidential Notice -->
                   <div style="background: #fef3c7; color: #92400e; padding: 12px 15px; border-radius: 6px; margin: 15px 0; border-left: 3px solid ${ACCENT_COLOR}; font-weight: 600; font-size: 10px; line-height: 1.6;">
-                    🔒 <strong>CONFIDENTIAL:</strong> This email contains confidential and privileged information intended solely for the use of the addressee. If you are not the intended recipient, you are hereby notified that any dissemination, distribution, or copying of this email is strictly prohibited.
+                    <strong>CONFIDENTIAL:</strong> This email contains confidential and privileged information intended solely for the use of the addressee. If you are not the intended recipient, you are hereby notified that any dissemination, distribution, or copying of this email is strictly prohibited.
                   </div>
 
                   <!-- Privacy Warning -->
                   <div style="color: #9ca3af; font-size: 10px; margin: 10px 0; font-style: italic; line-height: 1.6;">
-                    ⚠️ <strong>PRIVACY & SECURITY:</strong> Do not share this email or your account credentials with anyone. eToro Trust Capital staff will never ask for your password or sensitive information via email.
+                    <strong>PRIVACY & SECURITY:</strong> Do not share this email or your account credentials with anyone. eToro Trust Capital staff will never ask for your password or sensitive information via email.
                   </div>
 
                   <p style="margin: 10px 0 0 0; color: ${TEXT_SECONDARY}; font-size: 11px;">

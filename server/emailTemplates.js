@@ -10,7 +10,7 @@ const styles = `
   body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f5f5f5; margin: 0; padding: 0; }
   .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
   .header { background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%); color: #ffffff; padding: 35px 20px; text-align: center; }
-  .header img { width: 120px; height: auto; display: block; margin: 0 auto; }
+  .header img { width: 160px; height: auto; display: block; margin: 0 auto; }
   .header p { margin: 15px 0 0 0; color: #f0b90b; font-size: 14px; letter-spacing: 1px; font-weight: bold; }
   .content { padding: 30px 20px; color: #333; background-color: #ffffff; }
   .content h2 { color: #0f172a; margin-top: 0; margin-bottom: 15px; }
@@ -47,7 +47,7 @@ const wrapTemplate = (title, bodyContent) => `
     <!-- Dark Header with Logo -->
     <div style="background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%); padding: 35px 20px; text-align: center;">
       <a href="${SITE_URL}" target="_blank" style="text-decoration: none; display: inline-block;">
-        <img src="${LOGO_IMAGE}" alt="eToro Trust Capital Logo" width="120" height="auto" style="display: block; height: auto; border: 0; font-family: sans-serif; font-size: 20px; color: #f0b90b; font-weight: bold;" onerror="this.style.display='none'; this.parentElement.innerHTML += '<div style=\'color: #f0b90b; font-size: 24px; font-weight: bold; letter-spacing: 2px;\'>eTORO TRUST CAPITAL</div>'" />
+        <img src="${LOGO_IMAGE}" alt="eToro Trust Capital Logo" width="160" height="auto" style="display: block; height: auto; border: 0; font-family: sans-serif; font-size: 20px; color: #f0b90b; font-weight: bold;" onerror="this.style.display='none'; this.parentElement.innerHTML += '<div style=\'color: #f0b90b; font-size: 24px; font-weight: bold; letter-spacing: 2px;\'>eTORO TRUST CAPITAL</div>'" />
       </a>
       <p style="margin: 15px 0 0 0; color: #f0b90b; font-size: 14px; letter-spacing: 1px; font-weight: bold;">eTORO TRUST CAPITAL</p>
     </div>
@@ -66,10 +66,10 @@ const wrapTemplate = (title, bodyContent) => `
       <p style="margin: 0 0 5px 0;">&copy; ${new Date().getFullYear()} eToro Trust Capital. All rights reserved.</p>
       <div style="height: 1px; background: #ddd; margin: 15px 0;"></div>
       <div style="background: #fef3c7; color: #92400e; padding: 12px 15px; border-radius: 6px; margin: 15px 0; border-left: 3px solid #f0b90b; font-weight: 600; font-size: 10px;">
-        🔒 CONFIDENTIAL: This email contains confidential and privileged information intended solely for the use of the addressee. If you are not the intended recipient, you are hereby notified that any dissemination, distribution, or copying of this email is strictly prohibited.
+        CONFIDENTIAL: This email contains confidential and privileged information intended solely for the use of the addressee. If you are not the intended recipient, you are hereby notified that any dissemination, distribution, or copying of this email is strictly prohibited.
       </div>
       <div style="color: #9ca3af; font-size: 10px; margin: 10px 0; font-style: italic;">
-        ⚠️ PRIVACY & SECURITY: Do not share this email or your account credentials with anyone. eToro Trust Capital staff will never ask for your password or sensitive information via email.
+        PRIVACY & SECURITY: Do not share this email or your account credentials with anyone. eToro Trust Capital staff will never ask for your password or sensitive information via email.
       </div>
       <p style="margin: 10px 0 0 0; font-size: 11px;">This is an automated message, please do not reply to this email directly.</p>
     </div>
