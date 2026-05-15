@@ -36,6 +36,23 @@ export interface UserRecord {
   role?: 'user' | 'admin' | 'superadmin'
 }
 
+export interface ReferralRecord {
+  id?: string
+  referrerId?: string
+  referredId?: string
+  referralCode?: string
+  bonusEarned?: number
+  level?: number
+  created_at?: string
+  referredUser?: UserRecord | null
+}
+
+export interface ReferralSummary {
+  count: number
+  bonusTotal: number
+  referrals: ReferralRecord[]
+}
+
 export interface InvestmentRecord {
   id?: string
   idnum?: string
@@ -226,6 +243,25 @@ const mapInvestmentRecord = (record: any): InvestmentRecord => {
   }
 }
 
+const mapReferralRecord = (record: any): ReferralRecord => {
+  if (!record || typeof record !== 'object') return record
+  const {
+    referrer_id,
+    referred_id,
+    referral_code,
+    bonus_earned,
+    ...rest
+  } = record
+
+  return {
+    ...rest,
+    referrerId: referrer_id ?? record.referrerId,
+    referredId: referred_id ?? record.referredId,
+    referralCode: referral_code ?? record.referralCode,
+    bonusEarned: bonus_earned ?? record.bonusEarned ?? 0,
+  }
+}
+
 const mapWithdrawalRecord = (record: any): WithdrawalRecord => {
   if (!record || typeof record !== 'object') return record
   const { 
@@ -347,11 +383,19 @@ export const supabaseAuth = {
           const newReferralCount = (referrer.referralCount || 0) + 1
           const referralBonus = 50 // $50 bonus per referral
           const newBonusTotal = (referrer.referralBonusTotal || 0) + referralBonus
+
+          await supabaseDb.createReferral({
+            referrerId: referrer.idnum,
+            referredId: idnum,
+            referralCode: userData.referredByCode,
+            bonusEarned: referralBonus,
+            level: 1,
+          })
           
           await supabaseDb.updateUser(referrer.idnum, {
             referralCount: newReferralCount,
             referralBonusTotal: newBonusTotal,
-            bonus: (referrer.bonus || 0) + referralBonus,
+            balance: (referrer.balance || 0) + referralBonus,
           })
 
           // Send referral notification to referrer
@@ -492,10 +536,107 @@ export const supabaseDb = {
       .single()
     
     if (error) {
-      if (error.code === 'PGRST116') return null
-      throw error
+      if (error.code !== 'PGRST116') throw error
+    } else {
+      return mapUserRecord(data)
     }
-    return mapUserRecord(data)
+
+    const { data: userByIdnum, error: idnumError } = await db
+      .from('users')
+      .select('*')
+      .eq('idnum', referralCode)
+      .single()
+
+    if (idnumError) {
+      if (idnumError.code === 'PGRST116') return null
+      throw idnumError
+    }
+
+    return mapUserRecord(userByIdnum)
+  },
+
+  async getReferralSummary(referrerId: string, referralCode?: string | null): Promise<ReferralSummary> {
+    const referralsById = new Map<string, ReferralRecord>()
+    let bonusTotal = 0
+
+    try {
+      const { data, error } = await db
+        .from('referrals')
+        .select('*')
+        .eq('referrerId', referrerId)
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+
+      ;(data || []).map(mapReferralRecord).forEach((referral: ReferralRecord) => {
+        if (!referral.referredId) return
+        referralsById.set(referral.referredId, referral)
+        bonusTotal += Number(referral.bonusEarned || 0)
+      })
+    } catch (error) {
+      console.warn('Could not fetch referrals table summary:', error)
+    }
+
+    const referralLookupValues = Array.from(new Set([referralCode, referrerId].filter(Boolean))) as string[]
+
+    if (referralLookupValues.length > 0) {
+      try {
+        const { data, error } = await db
+          .from('users')
+          .select('idnum, name, "userName", email, date, created_at, "referredByCode"')
+          .in('referredByCode', referralLookupValues)
+          .order('created_at', { ascending: false })
+
+        if (error) throw error
+
+        ;(data || []).forEach((user: any) => {
+          if (!user.idnum || referralsById.has(user.idnum)) return
+          referralsById.set(user.idnum, {
+            referredId: user.idnum,
+            referralCode: user.referredByCode || referralCode || referrerId,
+            bonusEarned: 0,
+            level: 1,
+            created_at: user.created_at || user.date,
+            referredUser: mapUserRecord(user),
+          })
+        })
+      } catch (error) {
+        console.warn('Could not fetch referred users summary:', error)
+      }
+    }
+
+    const referredIds = Array.from(referralsById.keys())
+    if (referredIds.length > 0) {
+      try {
+        const { data, error } = await db
+          .from('users')
+          .select('idnum, name, "userName", email, date, created_at, "referredByCode"')
+          .in('idnum', referredIds)
+
+        if (error) throw error
+
+        const usersById = new Map(
+          (data || [])
+            .map(mapUserRecord)
+            .filter((user: UserRecord) => user.idnum)
+            .map((user: UserRecord) => [user.idnum as string, user])
+        )
+
+        referralsById.forEach((referral, referredId) => {
+          if (!referral.referredUser) {
+            referral.referredUser = usersById.get(referredId) || null
+          }
+        })
+      } catch (error) {
+        console.warn('Could not hydrate referral users:', error)
+      }
+    }
+
+    return {
+      count: referralsById.size,
+      bonusTotal,
+      referrals: Array.from(referralsById.values()),
+    }
   },
 
   async createUser(userData: Partial<UserRecord>): Promise<UserRecord> {
@@ -519,6 +660,29 @@ export const supabaseDb = {
     
     if (error) throw error
     return mapUserRecord(data)
+  },
+
+  async createReferral(referralData: Partial<ReferralRecord>): Promise<ReferralRecord | null> {
+    const payload = {
+      referrerId: referralData.referrerId,
+      referredId: referralData.referredId,
+      referralCode: referralData.referralCode,
+      bonusEarned: referralData.bonusEarned ?? 0,
+      level: referralData.level ?? 1,
+    }
+
+    const { data, error } = await db
+      .from('referrals')
+      .upsert([payload], { onConflict: 'referrerId,referredId' })
+      .select()
+      .single()
+
+    if (error) {
+      console.warn('Referral record insert failed:', error)
+      return null
+    }
+
+    return mapReferralRecord(data)
   },
 
   async deleteUser(idnum: string): Promise<void> {

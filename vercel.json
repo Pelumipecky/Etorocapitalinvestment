@@ -4,6 +4,12 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": null,
+  "crons": [
+    {
+      "path": "/api/credit-daily-roi",
+      "schedule": "0 0 * * *"
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/(.*)",

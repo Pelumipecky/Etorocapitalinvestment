@@ -731,17 +731,32 @@ app.post('/api/logout', (req, res) => {
 });
 
 // POST /api/credit-daily-roi — credits daily ROI to active investments
-app.post('/api/credit-daily-roi', async (req, res) => {
+const ROI_PLAN_CONFIG = {
+  '3-Day Plan': { durationDays: 3, dailyRate: 0.10, bonus: 0.05 },
+  '7-Day Plan': { durationDays: 7, dailyRate: 0.03, bonus: 0.075 },
+  '12-Day Plan': { durationDays: 12, dailyRate: 0.035, bonus: 0.09 },
+  '15-Day Plan': { durationDays: 15, dailyRate: 0.04, bonus: 0.105 },
+  '3-Month Plan': { durationDays: 90, dailyRate: 0.04, bonus: 0.12 },
+  '6-Month Plan': { durationDays: 180, dailyRate: 0.05, bonus: 0.135 }
+};
+
+const dollars = (value) => Math.round((Number(value) || 0) * 100) / 100;
+const getCreditedRoi = (investment) => Number(investment.creditedRoi ?? investment.credited_roi ?? 0) || 0;
+const getCreditedBonus = (investment) => Number(investment.creditedBonus ?? investment.credited_bonus ?? 0) || 0;
+const getInvestmentStartDate = (investment) => {
+  const rawDate = investment.startDate || investment.start_date || investment.date || investment.created_at;
+  const parsedDate = rawDate ? new Date(rawDate) : null;
+  return parsedDate && !Number.isNaN(parsedDate.getTime()) ? parsedDate : null;
+};
+
+async function handleCreditDailyRoi(req, res) {
   try {
-    // Investment plan configurations (should match the ones in planConfig.ts)
-    const PLAN_CONFIG = {
-      '3-Day Plan': { durationDays: 3, dailyRate: 0.02, bonus: 0.05 },
-      '7-Day Plan': { durationDays: 7, dailyRate: 0.025, bonus: 0.075 },
-      '12-Day Plan': { durationDays: 12, dailyRate: 0.03, bonus: 0.09 },
-      '15-Day Plan': { durationDays: 15, dailyRate: 0.035, bonus: 0.105 },
-      '3-Month Plan': { durationDays: 90, dailyRate: 0.04, bonus: 0.12 },
-      '6-Month Plan': { durationDays: 180, dailyRate: 0.045, bonus: 0.135 }
-    };
+    if (process.env.CRON_SECRET) {
+      const authHeader = req.headers.authorization || '';
+      if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+    }
 
     // Get all active investments
     const { data: activeInvestments, error: invError } = await supabase
@@ -761,113 +776,111 @@ app.post('/api/credit-daily-roi', async (req, res) => {
 
     let processed = 0;
     let completed = 0;
+    let skipped = 0;
+    let errors = 0;
+    let totalCredited = 0;
+    const now = new Date();
+    const dayMs = 1000 * 60 * 60 * 24;
 
     for (const investment of activeInvestments) {
       try {
-        const planConfig = PLAN_CONFIG[investment.plan];
+        const planConfig = ROI_PLAN_CONFIG[investment.plan];
         if (!planConfig) {
           console.warn(`Unknown plan: ${investment.plan} for investment ${investment.id}`);
+          skipped++;
           continue;
         }
 
-        // Calculate daily ROI amount
-        const dailyRoiAmount = investment.capital * planConfig.dailyRate;
+        const capital = Number(investment.capital) || 0;
+        const dailyRoiAmount = dollars(capital * planConfig.dailyRate);
+        const startDate = getInvestmentStartDate(investment);
 
-        // Check if investment is still within duration
-        // Use startDate (approval date) if available, otherwise fall back to creation date
-        const startDate = investment.startDate ? new Date(investment.startDate) : new Date(investment.date);
-        const now = new Date();
-        const daysElapsed = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
-
-        // Check if we already credited ROI today (compare dates)
-        // Use startDate as baseline for crediting, not creation date
-        const investmentStartDate = investment.startDate ? new Date(investment.startDate) : new Date(investment.date);
-        const lastCreditDate = investment.updated_at ? new Date(investment.updated_at) : investmentStartDate;
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const lastCreditDay = new Date(lastCreditDate);
-        lastCreditDay.setHours(0, 0, 0, 0);
-
-        if (lastCreditDay >= today) {
-          console.log(`ROI already credited today for investment ${investment.id}`);
+        if (!capital || !startDate) {
+          console.warn(`Skipping investment ${investment.id}: missing capital or start date`);
+          skipped++;
           continue;
         }
 
-        if (daysElapsed >= planConfig.durationDays) {
-          // Investment completed - credit all remaining ROI plus final bonus
-          const totalExpectedRoi = investment.capital * planConfig.dailyRate * planConfig.durationDays;
-          const remainingRoi = totalExpectedRoi - (investment.creditedRoi || 0);
-          const finalBonus = investment.capital * planConfig.bonus;
+        const daysElapsed = Math.floor((now.getTime() - startDate.getTime()) / dayMs);
+        const payableDays = Math.min(Math.max(daysElapsed, 0), planConfig.durationDays);
+        const expectedRoiToDate = dollars(dailyRoiAmount * payableDays);
+        const totalExpectedRoi = dollars(dailyRoiAmount * planConfig.durationDays);
+        const creditedRoi = getCreditedRoi(investment);
+        const roiToCredit = dollars(Math.max(0, expectedRoiToDate - creditedRoi));
+        const isComplete = daysElapsed >= planConfig.durationDays;
+        const finalBonus = isComplete ? dollars(capital * planConfig.bonus) : 0;
+        const bonusToCredit = dollars(Math.max(0, finalBonus - getCreditedBonus(investment)));
 
-          // Update investment as completed
-          await supabase
-            .from('investments')
-            .update({
-              status: 'completed',
-              creditedRoi: totalExpectedRoi,
-              creditedBonus: finalBonus,
-              updated_at: new Date().toISOString()
-            })
-            .eq('id', investment.id);
+        if (roiToCredit <= 0 && bonusToCredit <= 0 && !isComplete) {
+          console.log(`No ROI due yet for investment ${investment.id}`);
+          skipped++;
+          continue;
+        }
 
-          // Credit remaining ROI and bonus to user's balance
-          const { data: userData } = await supabase
-            .from('users')
-            .select('balance, bonus')
-            .eq('idnum', investment.idnum)
-            .single();
+        const { data: userData, error: userFetchError } = await supabase
+          .from('users')
+          .select('balance, bonus')
+          .eq('idnum', investment.idnum)
+          .single();
 
-          if (userData) {
-            const newBalance = (userData.balance || 0) + remainingRoi;
-            const newBonus = (userData.bonus || 0) + finalBonus;
+        if (userFetchError || !userData) {
+          console.error(`Could not fetch user ${investment.idnum} for ROI credit:`, userFetchError);
+          errors++;
+          continue;
+        }
 
-            await supabase
-              .from('users')
-              .update({
-                balance: newBalance,
-                bonus: newBonus,
-                updated_at: new Date().toISOString()
-              })
-              .eq('idnum', investment.idnum);
-          }
+        const newBalance = dollars((userData.balance || 0) + roiToCredit);
+        const newBonus = dollars((userData.bonus || 0) + bonusToCredit);
+        const investmentUpdate = {
+          creditedRoi: dollars(creditedRoi + roiToCredit),
+          updated_at: now.toISOString()
+        };
 
-          console.log(`Completed investment ${investment.id}: Credited remaining ROI $${remainingRoi.toFixed(2)} and final bonus $${finalBonus.toFixed(2)}`);
+        if (isComplete) {
+          investmentUpdate.status = 'completed';
+          investmentUpdate.creditedRoi = totalExpectedRoi;
+          investmentUpdate.creditedBonus = finalBonus;
+        }
+
+        const { error: investmentUpdateError } = await supabase
+          .from('investments')
+          .update(investmentUpdate)
+          .eq('id', investment.id);
+
+        if (investmentUpdateError) {
+          console.error(`Could not update investment ${investment.id}:`, investmentUpdateError);
+          errors++;
+          continue;
+        }
+
+        const { error: userUpdateError } = await supabase
+          .from('users')
+          .update({
+            balance: newBalance,
+            bonus: newBonus,
+            updated_at: now.toISOString()
+          })
+          .eq('idnum', investment.idnum);
+
+        if (userUpdateError) {
+          console.error(`Could not update user ${investment.idnum} balance:`, userUpdateError);
+          errors++;
+          continue;
+        }
+
+        totalCredited = dollars(totalCredited + roiToCredit);
+        processed++;
+
+        if (isComplete) {
+          console.log(`Completed investment ${investment.id}: credited ROI $${roiToCredit.toFixed(2)} and final bonus $${bonusToCredit.toFixed(2)}`);
           completed++;
         } else {
-          // Credit daily ROI for active investment
-          await supabase
-            .from('investments')
-            .update({
-              creditedRoi: (investment.creditedRoi || 0) + dailyRoiAmount,
-              updated_at: new Date().toISOString()
-            })
-            .eq('id', investment.id);
-
-          // Credit daily ROI to user's balance
-          const { data: userData } = await supabase
-            .from('users')
-            .select('balance')
-            .eq('idnum', investment.idnum)
-            .single();
-
-          if (userData) {
-            const newBalance = (userData.balance || 0) + dailyRoiAmount;
-            await supabase
-              .from('users')
-              .update({
-                balance: newBalance,
-                updated_at: new Date().toISOString()
-              })
-              .eq('idnum', investment.idnum);
-          }
-
-          console.log(`Credited $${dailyRoiAmount.toFixed(2)} daily ROI for investment ${investment.id} (${investment.plan})`);
+          console.log(`Credited $${roiToCredit.toFixed(2)} ROI for investment ${investment.id} (${investment.plan})`);
         }
-
-        processed++;
 
       } catch (invProcessError) {
         console.error(`Error processing investment ${investment.id}:`, invProcessError);
+        errors++;
       }
     }
 
@@ -875,6 +888,9 @@ app.post('/api/credit-daily-roi', async (req, res) => {
       message: `Daily ROI crediting completed`,
       processed,
       completed,
+      skipped,
+      errors,
+      totalCredited,
       totalInvestments: activeInvestments.length
     });
 
@@ -882,7 +898,11 @@ app.post('/api/credit-daily-roi', async (req, res) => {
     console.error('Daily ROI crediting error:', err);
     return res.status(500).json({ error: 'Server error during ROI crediting' });
   }
-});
+}
+
+// GET is used by Vercel Cron; POST is kept for manual/admin triggering.
+app.get('/api/credit-daily-roi', handleCreditDailyRoi);
+app.post('/api/credit-daily-roi', handleCreditDailyRoi);
 
 // GET /api/scheduler/status — check scheduler status
 app.get('/api/scheduler/status', (req, res) => {
