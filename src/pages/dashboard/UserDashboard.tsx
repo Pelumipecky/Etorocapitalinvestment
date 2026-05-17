@@ -87,9 +87,8 @@ const getReferralDetails = (referral: ReferralRecord) => {
 }
 
 const getInvestmentEarnings = (investment: Investment) =>
-  (Number(investment.creditedRoi || 0) + Number(investment.creditedBonus || 0)) ||
-  Number(investment.earnedRoi || 0) ||
-  Number(investment.roi || 0)
+  // Only return CREDITED earnings, not pending/expected amounts
+  Number(investment.creditedRoi || 0) + Number(investment.creditedBonus || 0)
 
 const getTodayKey = () => new Date().toISOString().slice(0, 10)
 
