@@ -42,6 +42,7 @@ export interface ReferralRecord {
   referredId?: string
   referralCode?: string
   bonusEarned?: number
+  bonusAwarded?: boolean
   level?: number
   created_at?: string
   referredUser?: UserRecord | null
