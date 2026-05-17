@@ -105,7 +105,7 @@ const DashboardMarquee = ({ btcPrice, loading }: { btcPrice: number; loading: bo
     <div className="marquee-content">
       <span className="marquee-item"><i className="icofont-rocket-alt-2"></i> {bitcoinMessage}</span>
       <span className="marquee-item"><i className="icofont-star"></i> New "Diamond Hands" Plan available: Earn 150% ROI in 30 Days.</span>
-      <span className="marquee-item"><i className="icofont-gift"></i> Limited Time: Refer a friend and get $50 bonus instantly!</span>
+      <span className="marquee-item"><i className="icofont-gift"></i> Limited Time: Refer a friend and earn 10% commission on their first deposit or investment!</span>
       <span className="marquee-item"><i className="icofont-shield-alt"></i> Security Update: Enable 2FA for enhanced account protection.</span>
       <span className="marquee-item"><i className="icofont-chart-growth"></i> Top Gainer: ETH up 12% in the last 24 hours.</span>
       <span className="marquee-item"><i className="icofont-info-circle"></i> System Maintenance scheduled for Sunday 02:00 UTC.</span>
@@ -153,7 +153,26 @@ function UserDashboard() {
     return currentOrigin || appUrl || serverUrl;
   };
 
+  // Track previous balance to detect profit credits
+  const [previousBalance, setPreviousBalance] = useState<number | null>(null);
+
   const syncSessionUser = (dbUser: any) => {
+    // Detect profit credit (balance increased)
+    if (previousBalance !== null && dbUser.balance !== undefined) {
+      const balanceIncrease = dbUser.balance - previousBalance;
+      if (balanceIncrease > 0.01) {
+        // Balance increased - likely from profit credit
+        addNotification(
+          '💰 Profit Credited',
+          `Your profit of $${balanceIncrease.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} has been credited to your account!`,
+          'success'
+        );
+      }
+    }
+    
+    // Update previous balance for next comparison
+    setPreviousBalance(dbUser.balance || 0);
+    
     updateUser({
       id: dbUser.id,
       email: dbUser.email,
@@ -247,6 +266,22 @@ function UserDashboard() {
   };
   // Notifications modal state
   const [showNotifications, setShowNotifications] = useState(false);
+  // Track the last displayed success notification ID for auto-dismiss
+  const [lastDisplayedSuccessId, setLastDisplayedSuccessId] = useState<string | number | null>(null);
+
+  // Auto-dismiss toast notification after 5 seconds
+  useEffect(() => {
+    const recentSuccess = notifications.find((n: Notification) => n.type === 'success');
+    if (recentSuccess && recentSuccess.id !== lastDisplayedSuccessId) {
+      setLastDisplayedSuccessId(recentSuccess.id);
+      const timeout = setTimeout(() => {
+        // Remove this notification from the list to hide the toast
+        setNotifications(prev => prev.filter(n => n.id !== recentSuccess.id));
+        setLastDisplayedSuccessId(null);
+      }, 5000); // 5 seconds
+      return () => clearTimeout(timeout);
+    }
+  }, [notifications, lastDisplayedSuccessId]);
 
       // Helper to force balance refresh after deposit or admin update
       async function refreshUserBalance() {
@@ -4918,8 +4953,8 @@ function UserDashboard() {
                   </div>
                   <div className="stat-details">
                     <p className="stat-label">Commission Rate</p>
-                    <h2 className="stat-value">5%</h2>
-                    <p className="stat-change positive">Per referral investment</p>
+                    <h2 className="stat-value">10%</h2>
+                    <p className="stat-change positive">On first deposit/investment</p>
                   </div>
                 </div>
 
@@ -4928,9 +4963,9 @@ function UserDashboard() {
                     <i className="icofont-gift"></i>
                   </div>
                   <div className="stat-details">
-                    <p className="stat-label">Pending Rewards</p>
-                    <h2 className="stat-value">$0</h2>
-                    <p className="stat-info">Awaiting payout</p>
+                    <p className="stat-label">Pending Bonuses</p>
+                    <h2 className="stat-value">{downlineReferrals.filter(r => !r.bonusAwarded).length}</h2>
+                    <p className="stat-info">Awaiting first transaction</p>
                   </div>
                 </div>
               </div>
@@ -4988,11 +5023,16 @@ function UserDashboard() {
                         <div className="activity-details">
                           <h4>{getReferralUsername(referral)}</h4>
                           <p>{getReferralDetails(referral)}</p>
+                          <small style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                            {referral.bonusAwarded ? '✅ Bonus awarded' : '⏳ Awaiting first deposit/investment'}
+                          </small>
                         </div>
-                        <div className="activity-amount positive">
-                          +${formatCurrency(referral.bonusEarned || 0)}
+                        <div className={`activity-amount ${referral.bonusAwarded ? 'positive' : 'neutral'}`}>
+                          {referral.bonusAwarded ? `+$${formatCurrency(referral.bonusEarned || 0)}` : 'Pending'}
                         </div>
-                        <span className="status-badge active">Active</span>
+                        <span className={`status-badge ${referral.bonusAwarded ? 'active' : 'pending'}`}>
+                          {referral.bonusAwarded ? 'Earned' : 'Pending'}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -5000,7 +5040,7 @@ function UserDashboard() {
                   <div className="empty-state">
                     <i className="icofont-users-alt-3"></i>
                     <p>No referrals yet</p>
-                    <small style={{ color: '#64748b' }}>Share your referral link to start earning commissions</small>
+                    <small style={{ color: '#64748b' }}>Share your referral link to start earning 10% commissions</small>
                   </div>
                 )}
               </div>
@@ -5050,8 +5090,8 @@ function UserDashboard() {
                       color: '#10b981',
                       fontWeight: 700
                     }}>2</div>
-                    <h5 style={{ color: '#f8fafc', marginBottom: '0.25rem' }}>Friend Invests</h5>
-                    <p style={{ color: '#94a3b8', fontSize: '0.8125rem', margin: 0 }}>They sign up & make an investment</p>
+                    <h5 style={{ color: '#f8fafc', marginBottom: '0.25rem' }}>First Deposit/Investment</h5>
+                    <p style={{ color: '#94a3b8', fontSize: '0.8125rem', margin: 0 }}>They make their first transaction</p>
                   </div>
                   <div style={{ 
                     padding: '1rem', 
@@ -5073,7 +5113,7 @@ function UserDashboard() {
                       fontWeight: 700
                     }}>3</div>
                     <h5 style={{ color: '#f8fafc', marginBottom: '0.25rem' }}>Earn Rewards</h5>
-                    <p style={{ color: '#94a3b8', fontSize: '0.8125rem', margin: 0 }}>Get 5% of their investment</p>
+                    <p style={{ color: '#94a3b8', fontSize: '0.8125rem', margin: 0 }}>Get 10% of their deposit as bonus</p>
                   </div>
                 </div>
               </div>
@@ -8212,6 +8252,58 @@ function UserDashboard() {
         </div>
       )}
 
+      {/* Floating Profit Notification Toast */}
+      {notifications.length > 0 && (() => {
+        const recentSuccess = notifications.find((n: Notification) => n.type === 'success');
+        if (recentSuccess) {
+          return (
+            <div
+              style={{
+                position: 'fixed',
+                bottom: '30px',
+                right: '30px',
+                backgroundColor: '#10b981',
+                color: 'white',
+                padding: '16px 24px',
+                borderRadius: '12px',
+                boxShadow: '0 8px 24px rgba(16, 185, 129, 0.35)',
+                maxWidth: '380px',
+                animation: 'toastSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                zIndex: 9999,
+                fontFamily: 'var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255,255,255,0.2)'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                <span style={{ fontSize: '24px', flexShrink: 0, marginTop: '2px' }}>💰</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: '700', fontSize: '15px', marginBottom: '4px', lineHeight: 1.2 }}>
+                    {recentSuccess.title || 'Profit Credited'}
+                  </div>
+                  <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.9)', marginBottom: '6px', lineHeight: 1.4 }}>
+                    {recentSuccess.message}
+                  </div>
+                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>
+                    {recentSuccess.created_at ? new Date(recentSuccess.created_at).toLocaleTimeString('en-US', { 
+                      hour: '2-digit', 
+                      minute: '2-digit', 
+                      second: '2-digit',
+                      hour12: true 
+                    }) : new Date().toLocaleTimeString('en-US', { 
+                      hour: '2-digit', 
+                      minute: '2-digit', 
+                      second: '2-digit',
+                      hour12: true 
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+      })()}
+
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; }
@@ -8235,6 +8327,28 @@ function UserDashboard() {
           }
           50% {
             transform: scale(1.05);
+          }
+        }
+
+        @keyframes toastSlideIn {
+          from {
+            opacity: 0;
+            transform: translateX(400px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes toastFadeOut {
+          from {
+            opacity: 1;
+            transform: translateX(0);
+          }
+          to {
+            opacity: 0;
+            transform: translateX(400px);
           }
         }
       `}</style>

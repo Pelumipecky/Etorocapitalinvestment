@@ -17,6 +17,49 @@ const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: { autoRefreshToken: false }
 });
 
+// Helper function to send profit notification emails
+async function sendProfitNotificationEmail(userEmail, userName, planName, roiAmount, bonusAmount, newBalance) {
+  try {
+    const subject = bonusAmount > 0 ? 'Daily Investment Return & Bonus Credited' : 'Daily Investment Return Credited';
+    const totalAmount = roiAmount + bonusAmount;
+    
+    console.log(`[EmailNotification] Sending profit notification to ${userEmail}...`);
+    console.log(`[EmailNotification] Details - ROI: $${roiAmount}, Bonus: $${bonusAmount}, Total: $${totalAmount}`);
+    
+    // Try to call local API endpoint first (if available)
+    const apiUrl = process.env.API_URL || 'http://localhost:3000';
+    try {
+      const response = await fetch(`${apiUrl}/api/notify/profit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userEmail,
+          userName,
+          planName,
+          roiAmount: parseFloat(roiAmount.toFixed(2)),
+          bonusAmount: parseFloat(bonusAmount.toFixed(2)),
+          newBalance: parseFloat(newBalance.toFixed(2))
+        })
+      });
+      
+      if (!response.ok) {
+        console.warn(`[EmailNotification] API endpoint failed: ${response.status}`);
+        // Continue without email if API fails (non-critical)
+      } else {
+        const result = await response.json();
+        console.log(`[EmailNotification] Email sent successfully: ${result.messageId || 'success'}`);
+      }
+    } catch (fetchError) {
+      console.warn(`[EmailNotification] Could not connect to API endpoint: ${fetchError.message}`);
+      console.log('[EmailNotification] Profit notification skipped (email service unavailable)');
+      // Don't throw - allow ROI credit to continue even if email fails
+    }
+  } catch (error) {
+    console.error(`[EmailNotification] Error: ${error.message}`);
+    // Don't throw - allow ROI credit to continue even if email fails
+  }
+}
+
 const PLAN_CONFIG = {
   '3-Day Plan': { durationDays: 3, dailyRate: 0.10, bonus: 0.05 },
   '7-Day Plan': { durationDays: 7, dailyRate: 0.03, bonus: 0.075 },
@@ -102,13 +145,19 @@ async function creditDailyROI() {
 
       const { data: userData, error: userFetchError } = await supabase
         .from('users')
-        .select('balance, bonus')
+        .select('balance, bonus, email, firstName, lastName, full_name')
         .eq('idnum', investment.idnum)
         .single();
 
       if (userFetchError || !userData) {
         throw new Error(`Failed to fetch user ${investment.idnum}: ${userFetchError?.message || 'not found'}`);
       }
+
+      // Extract user name from available fields
+      const userName = userData.full_name || 
+                       (userData.firstName && userData.lastName ? `${userData.firstName} ${userData.lastName}` : userData.firstName) ||
+                       `User ${investment.idnum}`;
+      const userEmail = userData.email;
 
       const investmentUpdate = {
         creditedRoi: dollars(creditedRoi + roiToCredit),
@@ -141,6 +190,14 @@ async function creditDailyROI() {
 
       if (userUpdateError) {
         throw new Error(`Failed to update user ${investment.idnum}: ${userUpdateError.message}`);
+      }
+
+      // Send profit notification email (non-blocking)
+      const newBalance = dollars((userData.balance || 0) + roiToCredit);
+      if (userEmail) {
+        sendProfitNotificationEmail(userEmail, userName, investment.plan, roiToCredit, bonusToCredit, newBalance).catch(err => {
+          console.warn(`[EmailNotification] Failed to send email for investment ${investment.id}: ${err.message}`);
+        });
       }
 
       processed++;

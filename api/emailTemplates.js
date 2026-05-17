@@ -159,36 +159,41 @@ export default {
     <p>If you believe this is an error, please contact support.</p>
   `),
 
-  roiCredited: (name, planName, amount, newBalance, date) => wrapTemplate('Daily ROI Credited', `
+  roiCredited: (name, planName, amount, newBalance, date) => wrapTemplate('Daily Profit Credited', `
     <div class="section">
       <p>Hello <strong>${name}</strong>,</p>
-      <p>Your daily ROI has been credited! Keep your investment active to continue earning.</p>
+      <p>🎉 Great news! Your daily investment returns have been credited to your account.</p>
     </div>
     
     <div class="section">
-      <h2>Earnings Summary</h2>
+      <h2>Profit Summary</h2>
       <table class="info-table">
         <tr>
-          <td>Amount Credited</td>
-          <td><span class="highlight">+$${amount}</span></td>
+          <td>Profit Amount</td>
+          <td><span class="highlight">+$${typeof amount === 'number' ? amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : amount}</span></td>
         </tr>
         <tr>
-          <td>Plan Name</td>
+          <td>Investment Plan</td>
           <td>${planName}</td>
         </tr>
         <tr>
-          <td>Credited Date</td>
+          <td>Date/Time Credited</td>
           <td>${date}</td>
         </tr>
         <tr>
           <td>Current Balance</td>
-          <td><strong>$${newBalance}</strong></td>
+          <td><strong>$${typeof newBalance === 'number' ? newBalance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : newBalance}</strong></td>
         </tr>
       </table>
     </div>
     
     <div class="section">
-      <p>Your investment is performing excellently. Continue to monitor your portfolio and watch your wealth grow!</p>
+      <p>Your investment continues to perform well. Keep your investment active to continue earning consistent returns!</p>
+      <div class="center"><a href="${SITE_URL}/dashboard" class="button">View Dashboard</a></div>
+    </div>
+
+    <div class="section" style="background: #f0f9ff; padding: 16px; border-radius: 8px; border-left: 4px solid #f0b90b;">
+      <p style="margin: 0; color: #334155; font-size: 13px;"><strong>💡 Tip:</strong> Your profits are added to your balance and can be withdrawn anytime or reinvested in new plans.</p>
     </div>
   `),
 
@@ -383,5 +388,45 @@ export default {
     <div class="section">
       <p>The funds should reflect in your account shortly depending on the network speed and payment method used.</p>
     </div>
+  `),
+
+  referralSignup: (referrerName, newUserName, newUserEmail, referralBonus, totalReferrals) => wrapTemplate('New Referral Signup', `
+    <h2>Great news, ${referrerName}!</h2>
+    <p>A new user has signed up using your referral code!</p>
+    
+    <div class="section" style="background-color: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; padding: 15px;">
+      <p><strong>New User:</strong> ${newUserName} (${newUserEmail})</p>
+      <p><strong>Status:</strong> Pending - 10% referral bonus will be awarded once they make their first deposit or investment.</p>
+      <p style="margin: 0; color: #666; font-size: 0.9em;">You now have <strong>${totalReferrals}</strong> total referrals.</p>
+    </div>
+    
+    <p>Start tracking your referral earnings in your dashboard!</p>
+    <center><a href="${SITE_URL}/dashboard" class="button">View Your Referrals</a></center>
+  `),
+
+  referralBonusAwarded: (referrerName, bonusAmount, sourceAmount, sourceType, newTotalBonus) => wrapTemplate('Referral Bonus Earned! 🎉', `
+    <h2>Congratulations, ${referrerName}!</h2>
+    <p>Your referred user just made their first ${sourceType === 'deposit_or_investment' ? 'deposit or investment' : 'transaction'}!</p>
+    
+    <div class="section" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(16, 185, 129, 0.2) 100%); border-left: 3px solid #10b981; padding: 15px;">
+      <table class="info-table">
+        <tr>
+          <td><strong>Transaction Amount</strong></td>
+          <td><span class="highlight">$${parseFloat(sourceAmount).toFixed(2)}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Your Referral Bonus (10%)</strong></td>
+          <td><span class="highlight" style="color: #10b981; font-size: 1.2em;">+$${parseFloat(bonusAmount).toFixed(2)}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Total Referral Bonuses</strong></td>
+          <td><strong>$${parseFloat(newTotalBonus).toFixed(2)}</strong></td>
+        </tr>
+      </table>
+    </div>
+    
+    <p>The bonus has been credited to your account balance immediately. You can now use it for investments or withdraw it!</p>
+    <center><a href="${SITE_URL}/dashboard" class="button">Check Your Balance</a></center>
   `)
 };
+

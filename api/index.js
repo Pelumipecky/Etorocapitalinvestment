@@ -116,10 +116,21 @@ app.use(express.json());
 // 1. Welcome Email
 app.post('/api/notify/welcome', async (req, res) => {
   const { email, name } = req.body;
-  if (!email) return res.status(400).json({ error: 'Email required' });
+  console.log('[Welcome Email] Endpoint hit with:', { email, name });
+  
+  if (!email) {
+    console.error('[Welcome Email] Missing email');
+    return res.status(400).json({ error: 'Email required' });
+  }
   
   const sent = await emailService.sendWelcome(email, name || email.split('@')[0]);
-  if (sent) return res.json({ success: true });
+  
+  if (sent) {
+    console.log(`[Welcome Email] ✅ Successfully sent to ${email}`);
+    return res.json({ success: true });
+  }
+  
+  console.error(`[Welcome Email] ❌ Failed to send to ${email}`);
   return res.status(500).json({ error: 'Failed to send email' });
 });
 
@@ -221,6 +232,50 @@ app.post('/api/notify/loan-request', async (req, res) => {
   } catch (error) {
     console.error('Loan admin notification error:', error);
     return res.status(500).json({ error: 'Failed to send loan admin notification' });
+  }
+});
+
+// 8. Referral Signup Notification (informing referrer of new signup)
+app.post('/api/notify/referral-signup', async (req, res) => {
+  const { referrerId, referrerEmail, referrerName, newUserEmail, newUserName, referralBonus, totalReferrals } = req.body;
+  if (!referrerEmail) return res.status(400).json({ error: 'Referrer email required' });
+  
+  try {
+    const html = templates.referralSignup(referrerName, newUserName, newUserEmail, referralBonus, totalReferrals);
+    const result = await sendEmail(referrerEmail, 'New Referral Signup', html, referrerName || 'User');
+    
+    if (result) {
+      console.log(`[Referral Signup] ✅ Notification sent to ${referrerEmail}`);
+      return res.json({ success: true });
+    }
+    
+    console.error(`[Referral Signup] ❌ Failed to send to ${referrerEmail}`);
+    return res.status(500).json({ error: 'Failed to send referral signup email' });
+  } catch (error) {
+    console.error('Referral signup notification error:', error);
+    return res.status(500).json({ error: 'Failed to send referral signup notification' });
+  }
+});
+
+// 9. Referral Bonus Awarded Notification (when bonus is actually paid)
+app.post('/api/notify/referral-bonus', async (req, res) => {
+  const { referrerId, referrerEmail, referrerName, bonusAmount, sourceAmount, sourceType, newTotalBonus } = req.body;
+  if (!referrerEmail) return res.status(400).json({ error: 'Referrer email required' });
+  
+  try {
+    const html = templates.referralBonusAwarded(referrerName, bonusAmount, sourceAmount, sourceType, newTotalBonus);
+    const result = await sendEmail(referrerEmail, 'Referral Bonus Earned!', html, referrerName || 'User');
+    
+    if (result) {
+      console.log(`[Referral Bonus] ✅ Notification sent to ${referrerEmail}`);
+      return res.json({ success: true });
+    }
+    
+    console.error(`[Referral Bonus] ❌ Failed to send to ${referrerEmail}`);
+    return res.status(500).json({ error: 'Failed to send referral bonus email' });
+  } catch (error) {
+    console.error('Referral bonus notification error:', error);
+    return res.status(500).json({ error: 'Failed to send referral bonus notification' });
   }
 });
 
@@ -602,6 +657,49 @@ app.post('/api/notify/investment-created', async (req, res) => {
   } catch (err) {
     console.error('❌ Investment created notification error:', err);
     res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// POST /api/notify/profit - Daily Profit/ROI Credited Notification
+app.post('/api/notify/profit', async (req, res) => {
+  try {
+    const { userEmail, userName, planName, roiAmount, bonusAmount, newBalance } = req.body || {};
+    
+    if (!userEmail || !userName || !planName) {
+      console.warn('[ProfitEmail] Missing required fields:', { userEmail, userName, planName });
+      return res.status(400).json({ error: 'Missing required fields: userEmail, userName, planName' });
+    }
+
+    const roi = parseFloat(roiAmount) || 0;
+    const bonus = parseFloat(bonusAmount) || 0;
+    const totalAmount = roi + bonus;
+
+    console.log('[ProfitEmail] Profit notification request received');
+    console.log('[ProfitEmail] Details:', { userEmail, userName, planName, roiAmount: roi, bonusAmount: bonus, newBalance });
+
+    // Send profit notification email
+    const sent = await emailService.sendRoiCredit(
+      userEmail,
+      userName,
+      planName,
+      totalAmount,
+      newBalance
+    );
+
+    if (sent) {
+      console.log(`[ProfitEmail] ✅ Profit notification sent to ${userEmail}`);
+      return res.json({ 
+        success: true, 
+        messageId: `profit-${Date.now()}`,
+        details: { userEmail, planName, totalAmount, newBalance }
+      });
+    } else {
+      console.warn(`[ProfitEmail] ⚠️ Failed to send profit notification to ${userEmail}`);
+      return res.status(500).json({ error: 'Failed to send profit notification email' });
+    }
+  } catch (err) {
+    console.error('❌ [ProfitEmail] Error:', err?.message || err);
+    res.status(500).json({ error: 'Server error', message: err?.message || 'Unknown error' });
   }
 });
 

@@ -12,7 +12,6 @@
 
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
-import emailjs from '@emailjs/nodejs';
 
 dotenv.config();
 
@@ -26,6 +25,42 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+// Helper function to send profit notification emails via API
+async function sendProfitNotificationEmail(userEmail, userName, planName, profitAmount, newBalance) {
+  try {
+    const apiUrl = process.env.API_URL || 'http://localhost:3000';
+    
+    console.log(`[EmailNotification] Sending backfill profit notification to ${userEmail}...`);
+    
+    try {
+      const response = await fetch(`${apiUrl}/api/notify/profit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userEmail,
+          userName,
+          planName,
+          roiAmount: parseFloat(profitAmount.toFixed(2)),
+          bonusAmount: 0,
+          newBalance: parseFloat(newBalance.toFixed(2))
+        })
+      });
+      
+      if (!response.ok) {
+        console.warn(`[EmailNotification] API endpoint failed: ${response.status}`);
+      } else {
+        const result = await response.json();
+        console.log(`[EmailNotification] ✅ Backfill email sent successfully`);
+      }
+    } catch (fetchError) {
+      console.warn(`[EmailNotification] Could not connect to API endpoint: ${fetchError.message}`);
+      console.log('[EmailNotification] Profit notification skipped (email service unavailable)');
+    }
+  } catch (error) {
+    console.error(`[EmailNotification] Error: ${error.message}`);
+  }
+}
+
 // Investment plan configurations
 const PLAN_CONFIG = {
   '3-Day Plan': { durationDays: 3, dailyRate: 0.10, bonus: 0.05 },
@@ -35,44 +70,6 @@ const PLAN_CONFIG = {
   '3-Month Plan': { durationDays: 90, dailyRate: 0.04, bonus: 0.12 },
   '6-Month Plan': { durationDays: 180, dailyRate: 0.045, bonus: 0.135 }
 };
-
-const EMAILJS_SERVICE_ID = process.env.VITE_EMAILJS_SERVICE_ID || 'service_ciphervault';
-const EMAILJS_TEMPLATE_ID = process.env.VITE_EMAILJS_TEMPLATE_ID || 'template_notification';
-const EMAILJS_PUBLIC_KEY = process.env.VITE_EMAILJS_PUBLIC_KEY || '';
-const EMAILJS_PRIVATE_KEY = process.env.EMAILJS_PRIVATE_KEY || '';
-const EMAIL_NOTIFICATIONS_ENABLED = process.env.VITE_EMAIL_NOTIFICATIONS_ENABLED === 'true';
-
-/**
- * Send backfill notification email
- */
-async function sendBackfillEmail(userEmail, userName, investmentId, missedDays, totalMissedROI, investmentPlan, newBalance) {
-  if (!EMAIL_NOTIFICATIONS_ENABLED || !EMAILJS_PRIVATE_KEY) {
-    console.log(`📧 Email skipped for ${userEmail} (notifications disabled or no private key)`);
-    return;
-  }
-
-  try {
-    emailjs.init({
-      publicKey: EMAILJS_PUBLIC_KEY,
-      privateKey: EMAILJS_PRIVATE_KEY,
-    });
-
-    const templateParams = {
-      to_email: userEmail,
-      to_name: userName,
-      subject: '💳 Backfill ROI Credit - Cypher Vault',
-      message: `We've credited ${missedDays} days of missed ROI to your account! Your ${investmentPlan} investment (ID: ${investmentId}) has earned $${totalMissedROI.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} in accumulated returns. Your updated balance: $${newBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}. Thank you for your patience!`,
-      notification_type: 'success',
-      app_name: 'Cypher Vault',
-      year: new Date().getFullYear(),
-    };
-
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
-    console.log(`✅ Backfill email sent to ${userEmail}`);
-  } catch (error) {
-    console.error(`⚠️ Failed to send backfill email to ${userEmail}:`, error.message);
-  }
-}
 
 /**
  * Calculate missed ROI for an investment
@@ -239,13 +236,11 @@ async function backfillMissedROI() {
 
         // Send notification email
         if (missedROI > 0) {
-          await sendBackfillEmail(
+          await sendProfitNotificationEmail(
             userData.email,
-            userData.name || userData.userName,
-            investment.id,
-            missedDays,
-            missedROI,
+            userData.name || userData.userName || `User ${investment.idnum}`,
             investment.plan,
+            missedROI,
             newBalance
           );
         }

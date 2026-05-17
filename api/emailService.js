@@ -46,8 +46,11 @@ const emailService = {
     return userResult && adminResult;
   },
   async sendWelcome(email, name) {
+    console.log('[WelcomeEmail] sendWelcome called with:', { email, name });
     const html = templates.welcome(name);
-    return await sendEmail(email, 'Welcome to eToro Trust Capital', html, name);
+    const result = await sendEmail(email, 'Welcome to eToro Trust Capital', html, name);
+    console.log('[WelcomeEmail] sendWelcome result:', { email, success: result });
+    return result;
   },
 
   async sendDepositRequest(userEmail, userName, amount, method, currency, txHash, proofUrl) {

@@ -229,6 +229,7 @@ CREATE TABLE IF NOT EXISTS referrals (
   "referredId" TEXT NOT NULL REFERENCES users(idnum) ON DELETE CASCADE,
   "referralCode" TEXT NOT NULL,
   "bonusEarned" NUMERIC DEFAULT 0,
+  "bonusAwarded" BOOLEAN DEFAULT FALSE,
   level INTEGER DEFAULT 1,
   created_at TIMESTAMP DEFAULT NOW(),
   UNIQUE("referrerId", "referredId")
@@ -237,6 +238,7 @@ CREATE TABLE IF NOT EXISTS referrals (
 -- Create indexes for faster queries
 CREATE INDEX IF NOT EXISTS idx_referrals_referrerId ON referrals("referrerId");
 CREATE INDEX IF NOT EXISTS idx_referrals_referredId ON referrals("referredId");
+CREATE INDEX IF NOT EXISTS idx_referrals_bonusAwarded ON referrals("bonusAwarded");
 
 -- ================================================
 -- FUNCTIONS & TRIGGERS

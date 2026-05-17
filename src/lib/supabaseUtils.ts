@@ -373,7 +373,8 @@ export const supabaseAuth = {
       ...userData,
     })
 
-    // Handle referral tracking
+    // Handle referral tracking - record relationship but DON'T award bonus yet
+    // Bonus will be awarded when referred user makes their first deposit/investment
     if (userData.referredByCode) {
       try {
         const referrer = await supabaseDb.getUserByReferralCode(userData.referredByCode)
@@ -381,37 +382,23 @@ export const supabaseAuth = {
         if (referrer && referrer.idnum) {
           // Update referrer's referral count
           const newReferralCount = (referrer.referralCount || 0) + 1
-          const referralBonus = 50 // $50 bonus per referral
-          const newBonusTotal = (referrer.referralBonusTotal || 0) + referralBonus
 
+          // Create referral record with bonusAwarded=false (will be awarded later)
           await supabaseDb.createReferral({
             referrerId: referrer.idnum,
             referredId: idnum,
             referralCode: userData.referredByCode,
-            bonusEarned: referralBonus,
+            bonusEarned: 0, // Will be calculated when deposit/investment is made
             level: 1,
+            bonusAwarded: false, // Track that bonus hasn't been awarded yet
           })
           
+          // Just update the referral count, not balance
           await supabaseDb.updateUser(referrer.idnum, {
             referralCount: newReferralCount,
-            referralBonusTotal: newBonusTotal,
-            balance: (referrer.balance || 0) + referralBonus,
           })
-
-          // Send referral notification to referrer
-          const referrerEmail = referrer.email || ''
-          const referrerNameParts = referrerEmail.split('@')
-          if (referrerEmail) {
-            notifyBackend('/api/notify/referral-signup', {
-              referrerId: referrer.idnum,
-              referrerEmail: referrerEmail,
-              referrerName: referrer.userName || referrer.name || referrerNameParts[0] || 'User',
-              newUserEmail: email,
-              newUserName: userData.userName || userData.name || email.split('@')[0],
-              referralBonus: referralBonus,
-              totalReferrals: newReferralCount,
-            })
-          }
+          
+          console.log(`✅ Referral relationship created for ${email} referred by ${referrer.email}. Bonus will be awarded on first deposit/investment.`);
         }
       } catch (error) {
         console.warn('Referral tracking failed:', error)
@@ -420,10 +407,36 @@ export const supabaseAuth = {
     }
 
     // Send Welcome Email
-    notifyBackend('/api/notify/welcome', { 
-      email, 
-      name: userData.name || userData.userName || email.split('@')[0] 
-    });
+    try {
+      await notifyBackend('/api/notify/welcome', { 
+        email, 
+        name: userData.name || userData.userName || email.split('@')[0] 
+      });
+      console.log(`✅ Welcome email notification sent to ${email}`);
+    } catch (error) {
+      console.error(`❌ Failed to send welcome email to ${email}:`, error);
+    }
+
+    // Send referral signup notification if applicable (for referrer awareness)
+    if (userData.referredByCode) {
+      try {
+        const referrer = await supabaseDb.getUserByReferralCode(userData.referredByCode)
+        if (referrer && referrer.email) {
+          await notifyBackend('/api/notify/referral-signup', {
+            referrerId: referrer.idnum,
+            referrerEmail: referrer.email,
+            referrerName: referrer.userName || referrer.name || referrer.email.split('@')[0],
+            newUserEmail: email,
+            newUserName: userData.userName || userData.name || email.split('@')[0],
+            referralBonus: 'pending', // Will be awarded after first deposit
+            totalReferrals: (referrer.referralCount || 0) + 1,
+          })
+          console.log(`✅ Referral signup notification sent to ${referrer.email}`);
+        }
+      } catch (error) {
+        console.warn('Referral signup notification failed:', error);
+      }
+    }
 
     return newUser
   },
@@ -683,6 +696,104 @@ export const supabaseDb = {
     }
 
     return mapReferralRecord(data)
+  },
+
+  async awardReferralBonus(referredUserId: string, depositOrInvestmentAmount: number): Promise<boolean> {
+    try {
+      // Find the referral record for this user
+      const { data: referralData, error: referralError } = await db
+        .from('referrals')
+        .select('*')
+        .eq('referredId', referredUserId)
+        .single()
+
+      if (referralError || !referralData) {
+        console.log(`ℹ️ No referral found for user ${referredUserId}. No bonus to award.`)
+        return false
+      }
+
+      // Check if bonus has already been awarded
+      const bonusAwarded = referralData.bonusAwarded === true
+      if (bonusAwarded) {
+        console.log(`ℹ️ Referral bonus already awarded for referral ID ${referralData.id}`)
+        return false
+      }
+
+      // Calculate 10% bonus
+      const bonusAmount = parseFloat((depositOrInvestmentAmount * 0.1).toFixed(2))
+      
+      if (bonusAmount <= 0) {
+        console.warn('Bonus amount is zero or negative, skipping award')
+        return false
+      }
+
+      // Get the referrer's current data
+      const { data: referrerData, error: referrerError } = await db
+        .from('users')
+        .select('*')
+        .eq('idnum', referralData.referrerId)
+        .single()
+
+      if (referrerError || !referrerData) {
+        console.error('Referrer not found:', referralData.referrerId)
+        return false
+      }
+
+      // Update referral record with bonus earned and mark as awarded
+      const { error: updateReferralError } = await db
+        .from('referrals')
+        .update({
+          bonusEarned: bonusAmount,
+          bonusAwarded: true,
+        })
+        .eq('id', referralData.id)
+
+      if (updateReferralError) {
+        console.error('Failed to update referral record:', updateReferralError)
+        return false
+      }
+
+      // Update referrer's balance and referral bonus total
+      const newBalance = (referrerData.balance || 0) + bonusAmount
+      const newReferralBonusTotal = (referrerData.referralBonusTotal || 0) + bonusAmount
+
+      const { error: updateUserError } = await db
+        .from('users')
+        .update({
+          balance: newBalance,
+          referralBonusTotal: newReferralBonusTotal,
+        })
+        .eq('idnum', referralData.referrerId)
+
+      if (updateUserError) {
+        console.error('Failed to update referrer balance:', updateUserError)
+        return false
+      }
+
+      console.log(`✅ Referral bonus awarded: $${bonusAmount} (10% of $${depositOrInvestmentAmount}) to referrer ${referralData.referrerId}`)
+      
+      // Send notification to referrer
+      try {
+        await notifyBackend('/api/notify/referral-bonus', {
+          referrerId: referralData.referrerId,
+          referrerEmail: referrerData.email,
+          referrerName: referrerData.userName || referrerData.name,
+          bonusAmount: bonusAmount,
+          sourceAmount: depositOrInvestmentAmount,
+          sourceType: 'deposit_or_investment',
+          referredUserEmail: referrerData.email,
+          newTotalBonus: newReferralBonusTotal,
+        })
+        console.log(`✅ Referral bonus notification sent to ${referrerData.email}`)
+      } catch (err) {
+        console.warn('Failed to send referral bonus notification:', err)
+      }
+
+      return true
+    } catch (error) {
+      console.error('Error awarding referral bonus:', error)
+      return false
+    }
   },
 
   async deleteUser(idnum: string): Promise<void> {
