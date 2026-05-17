@@ -279,6 +279,73 @@ app.post('/api/notify/referral-bonus', async (req, res) => {
   }
 });
 
+// 10. Admin Notification - New User Signup
+app.post('/api/notify/admin/new-user-signup', async (req, res) => {
+  try {
+    const { userEmail, userName, phoneNumber, referralCode } = req.body || {};
+    if (!userEmail) return res.status(400).json({ error: 'User email required' });
+
+    const sent = await sendAdminActivityEmail({
+      subject: `New User Signup: ${userName || userEmail}`,
+      heading: 'New User Registration',
+      rows: [
+        { label: 'User Name', value: userName || 'N/A' },
+        { label: 'Email', value: userEmail },
+        { label: 'Phone', value: phoneNumber || 'N/A' },
+        { label: 'Referral Code', value: referralCode || 'N/A' },
+        { label: 'Signup Date', value: new Date().toLocaleString() },
+        { label: 'Status', value: 'Active' },
+      ],
+    });
+
+    if (sent) {
+      console.log(`[Admin Signup Notification] ✅ Notification sent to ${ADMIN_EMAIL}`);
+      return res.json({ success: true });
+    }
+
+    console.error(`[Admin Signup Notification] ❌ Failed to send to ${ADMIN_EMAIL}`);
+    return res.status(500).json({ error: 'Failed to send admin signup notification' });
+  } catch (error) {
+    console.error('Admin signup notification error:', error);
+    return res.status(500).json({ error: 'Failed to send admin signup notification' });
+  }
+});
+
+// 11. Admin Notification - New User Investment
+app.post('/api/notify/admin/new-user-investment', async (req, res) => {
+  try {
+    const { userEmail, userName, investmentId, plan, capital, duration, roi } = req.body || {};
+    if (!userEmail || !plan || !capital) return res.status(400).json({ error: 'Missing required fields' });
+
+    const sent = await sendAdminActivityEmail({
+      subject: `New Investment: $${Number(capital).toLocaleString()} from ${userName || userEmail}`,
+      heading: 'New Investment Submission',
+      rows: [
+        { label: 'User Name', value: userName || 'N/A' },
+        { label: 'Email', value: userEmail },
+        { label: 'Investment Plan', value: plan },
+        { label: 'Capital Amount', value: `$${Number(capital).toLocaleString()}` },
+        { label: 'Expected ROI', value: `${roi || 'N/A'}%` },
+        { label: 'Duration', value: `${duration || 'N/A'} days` },
+        { label: 'Investment ID', value: investmentId || 'N/A' },
+        { label: 'Submission Date', value: new Date().toLocaleString() },
+        { label: 'Status', value: 'Pending Review' },
+      ],
+    });
+
+    if (sent) {
+      console.log(`[Admin Investment Notification] ✅ Notification sent to ${ADMIN_EMAIL}`);
+      return res.json({ success: true });
+    }
+
+    console.error(`[Admin Investment Notification] ❌ Failed to send to ${ADMIN_EMAIL}`);
+    return res.status(500).json({ error: 'Failed to send admin investment notification' });
+  } catch (error) {
+    console.error('Admin investment notification error:', error);
+    return res.status(500).json({ error: 'Failed to send admin investment notification' });
+  }
+});
+
 // Admin: Approve investment (backend-driven, idempotent email)
 app.post('/api/admin/investments/approve', async (req, res) => {
   try {

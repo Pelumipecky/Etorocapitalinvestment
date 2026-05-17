@@ -396,6 +396,192 @@ app.post('/api/test/send-deposit-email', async (req, res) => {
   }
 });
 
+// Admin Notification - New User Signup
+app.post('/api/notify/admin/new-user-signup', async (req, res) => {
+  try {
+    const { userEmail, userName, phoneNumber, referralCode } = req.body || {};
+    if (!userEmail) return res.status(400).json({ error: 'User email required' });
+
+    const SITE_URL = process.env.VITE_APP_URL || 'https://etorocapitalinvestment.vercel.app';
+    const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.EMAIL_REPLY_TO || process.env.EMAIL_FROM || 'noreply@etorocapital.online';
+    const EMAIL_LOGO_PATH = '/images/email-logo.png';
+    const LOGO_IMAGE = process.env.EMAIL_LOGO_URL || `${SITE_URL}${EMAIL_LOGO_PATH}`;
+
+    const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>New User Registration</title>
+    </head>
+    <body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+      <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div style="background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%); padding: 50px 20px; text-align: center;">
+          <a href="${SITE_URL}" target="_blank" style="text-decoration: none; display: inline-block;">
+            <img src="${LOGO_IMAGE}" alt="eToro Trust Capital" width="200" height="auto" style="display: block; max-width: 100%; height: auto; border: 0;" />
+          </a>
+          <p style="margin: 15px 0 0 0; color: #f0b90b; font-size: 14px; letter-spacing: 1px; font-weight: bold;">ADMIN NOTIFICATION</p>
+        </div>
+        
+        <div style="padding: 30px 20px; color: #333; background-color: #ffffff;">
+          <h2 style="color: #0f172a; margin: 0 0 15px 0; font-size: 24px;">📝 New User Registration</h2>
+          <p style="line-height: 1.8; margin: 0 0 20px 0;">A new user has just signed up on your platform.</p>
+          
+          <table style="width: 100%; border-collapse: collapse; margin: 25px 0;">
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9; width: 40%;">User Name</td>
+              <td style="padding: 12px; color: #333;">${userName || 'N/A'}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9;">Email</td>
+              <td style="padding: 12px; color: #333;">${userEmail}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9;">Phone</td>
+              <td style="padding: 12px; color: #333;">${phoneNumber || 'N/A'}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9;">Referral Code</td>
+              <td style="padding: 12px; color: #333;">${referralCode || 'N/A'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9;">Status</td>
+              <td style="padding: 12px; color: #10b981; font-weight: bold;">✓ Active</td>
+            </tr>
+          </table>
+          
+          <center style="margin-top: 25px;">
+            <a href="${SITE_URL}/dashboard/admin" style="display: inline-block; padding: 12px 30px; background-color: #f0b90b; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 14px;">View Admin Dashboard</a>
+          </center>
+        </div>
+        
+        <div style="background-color: #f5f5f5; color: #666; padding: 20px; text-align: center; font-size: 12px; border-top: 1px solid #ddd;">
+          <p style="margin: 0 0 5px 0;">&copy; ${new Date().getFullYear()} eToro Trust Capital. All rights reserved.</p>
+          <p style="margin: 0;">Automated admin notification.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+    `;
+
+    const result = await sendTransactionalEmail({
+      to: ADMIN_EMAIL,
+      toName: 'Admin',
+      subject: `New User Signup: ${userName || userEmail}`,
+      html
+    });
+
+    if (result.sent) {
+      console.log(`[Admin Signup Notification] ✅ Notification sent to ${ADMIN_EMAIL}`);
+      return res.json({ success: true });
+    }
+
+    console.error(`[Admin Signup Notification] ❌ Failed to send to ${ADMIN_EMAIL}`);
+    return res.status(500).json({ error: 'Failed to send admin signup notification' });
+  } catch (error) {
+    console.error('Admin signup notification error:', error);
+    return res.status(500).json({ error: 'Failed to send admin signup notification' });
+  }
+});
+
+// Admin Notification - New User Investment
+app.post('/api/notify/admin/new-user-investment', async (req, res) => {
+  try {
+    const { userEmail, userName, investmentId, plan, capital, duration, roi } = req.body || {};
+    if (!userEmail || !plan || !capital) return res.status(400).json({ error: 'Missing required fields' });
+
+    const SITE_URL = process.env.VITE_APP_URL || 'https://etorocapitalinvestment.vercel.app';
+    const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.EMAIL_REPLY_TO || process.env.EMAIL_FROM || 'noreply@etorocapital.online';
+    const EMAIL_LOGO_PATH = '/images/email-logo.png';
+    const LOGO_IMAGE = process.env.EMAIL_LOGO_URL || `${SITE_URL}${EMAIL_LOGO_PATH}`;
+
+    const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>New Investment Submission</title>
+    </head>
+    <body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+      <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div style="background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%); padding: 50px 20px; text-align: center;">
+          <a href="${SITE_URL}" target="_blank" style="text-decoration: none; display: inline-block;">
+            <img src="${LOGO_IMAGE}" alt="eToro Trust Capital" width="200" height="auto" style="display: block; max-width: 100%; height: auto; border: 0;" />
+          </a>
+          <p style="margin: 15px 0 0 0; color: #f0b90b; font-size: 14px; letter-spacing: 1px; font-weight: bold;">ADMIN NOTIFICATION</p>
+        </div>
+        
+        <div style="padding: 30px 20px; color: #333; background-color: #ffffff;">
+          <h2 style="color: #0f172a; margin: 0 0 15px 0; font-size: 24px;">💼 New Investment Submission</h2>
+          <p style="line-height: 1.8; margin: 0 0 20px 0;">A new investment has been submitted and requires your review.</p>
+          
+          <table style="width: 100%; border-collapse: collapse; margin: 25px 0;">
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9; width: 40%;">User Name</td>
+              <td style="padding: 12px; color: #333;">${userName || 'N/A'}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9;">Email</td>
+              <td style="padding: 12px; color: #333;">${userEmail}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9;">Investment Plan</td>
+              <td style="padding: 12px; color: #333;">${plan}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9;">Capital Amount</td>
+              <td style="padding: 12px; color: #f0b90b; font-weight: bold; font-size: 18px;">$${Number(capital).toLocaleString()}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9;">Expected ROI</td>
+              <td style="padding: 12px; color: #333;">${roi || 'N/A'}%</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9;">Duration</td>
+              <td style="padding: 12px; color: #333;">${duration || 'N/A'} days</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; font-weight: bold; color: #0f172a; background-color: #f9f9f9;">Status</td>
+              <td style="padding: 12px; color: #f59e0b; font-weight: bold;">⏳ Pending Review</td>
+            </tr>
+          </table>
+          
+          <center style="margin-top: 25px;">
+            <a href="${SITE_URL}/dashboard/admin" style="display: inline-block; padding: 12px 30px; background-color: #f0b90b; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 14px;">Review in Admin Panel</a>
+          </center>
+        </div>
+        
+        <div style="background-color: #f5f5f5; color: #666; padding: 20px; text-align: center; font-size: 12px; border-top: 1px solid #ddd;">
+          <p style="margin: 0 0 5px 0;">&copy; ${new Date().getFullYear()} eToro Trust Capital. All rights reserved.</p>
+          <p style="margin: 0;">Automated admin notification.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+    `;
+
+    const result = await sendTransactionalEmail({
+      to: ADMIN_EMAIL,
+      toName: 'Admin',
+      subject: `New Investment: $${Number(capital).toLocaleString()} from ${userName || userEmail}`,
+      html
+    });
+
+    if (result.sent) {
+      console.log(`[Admin Investment Notification] ✅ Notification sent to ${ADMIN_EMAIL}`);
+      return res.json({ success: true });
+    }
+
+    console.error(`[Admin Investment Notification] ❌ Failed to send to ${ADMIN_EMAIL}`);
+    return res.status(500).json({ error: 'Failed to send admin investment notification' });
+  } catch (error) {
+    console.error('Admin investment notification error:', error);
+    return res.status(500).json({ error: 'Failed to send admin investment notification' });
+  }
+});
+
 // Admin: Approve investment (server-side email, idempotent)
 app.post('/api/admin/investments/approve', async (req, res) => {
   try {

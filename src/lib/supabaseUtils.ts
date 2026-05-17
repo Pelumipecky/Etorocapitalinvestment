@@ -439,6 +439,19 @@ export const supabaseAuth = {
       }
     }
 
+    // Send admin notification for new user signup
+    try {
+      await notifyBackend('/api/notify/admin/new-user-signup', {
+        userEmail: email,
+        userName: userData.userName || userData.name || 'New User',
+        phoneNumber: userData.phoneNumber || '',
+        referralCode: newUser.referralCode,
+      })
+      console.log(`✅ Admin signup notification sent`);
+    } catch (error) {
+      console.warn('Admin signup notification failed:', error);
+    }
+
     return newUser
   },
 
@@ -860,6 +873,26 @@ export const supabaseDb = {
     }
     
     console.log('✅ [createInvestment] Investment created successfully:', data);
+    
+    // Send admin notification for new investment
+    try {
+      const user = await supabaseDb.getUserByIdnum(investmentData.idnum || '')
+      if (user && user.email) {
+        await notifyBackend('/api/notify/admin/new-user-investment', {
+          userEmail: user.email,
+          userName: user.userName || user.name || 'User',
+          investmentId: data.id,
+          plan: data.plan,
+          capital: data.capital,
+          duration: data.duration,
+          roi: data.roi,
+        })
+        console.log(`✅ Admin investment notification sent`);
+      }
+    } catch (error) {
+      console.warn('Admin investment notification failed:', error);
+    }
+    
     return mapInvestmentRecord(data)
   },
 
