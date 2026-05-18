@@ -1120,6 +1120,27 @@ async function handleCreditDailyRoi(req, res) {
           continue;
         }
 
+        // Add in-app notification for ROI credit
+        try {
+          let notificationMessage = '';
+          if (isComplete) {
+            notificationMessage = `🎉 Investment Completed! ROI credited: $${roiToCredit.toFixed(2)}, Final Bonus: $${bonusToCredit.toFixed(2)}. New balance: $${newBalance.toFixed(2)}`;
+          } else {
+            notificationMessage = `💰 Daily ROI Credited! Amount: $${roiToCredit.toFixed(2)}. New balance: $${newBalance.toFixed(2)}`;
+          }
+
+          await supabase.from('notifications').insert({
+            idnum: investment.idnum,
+            title: isComplete ? 'Investment Completed' : 'Daily ROI Credited',
+            message: notificationMessage,
+            type: 'success',
+            read: false,
+            created_at: now.toISOString()
+          });
+        } catch (notifyErr) {
+          console.error(`⚠️ Failed to create in-app notification for investment ${investment.id}:`, notifyErr.message);
+        }
+
         totalCredited = dollars(totalCredited + roiToCredit);
         processed++;
 

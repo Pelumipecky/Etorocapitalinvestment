@@ -177,6 +177,20 @@ async function creditDailyROI() {
               })
               .eq('idnum', investment.idnum);
 
+            // Add in-app notification for investment completion
+            try {
+              await supabase.from('notifications').insert({
+                idnum: investment.idnum,
+                title: 'Investment Completed',
+                message: `Your ${investment.plan} investment is complete! ROI: $${remainingRoi.toFixed(2)}, Final Bonus: $${finalBonus.toFixed(2)}. Your new balance: $${newBalance.toFixed(2)}`,
+                type: 'success',
+                read: false,
+                created_at: new Date().toISOString()
+              });
+            } catch (notifyErr) {
+              console.error('⚠️ Failed to create in-app notification for investment completion:', notifyErr.message);
+            }
+
             // Send investment completion email
             const userEmail = userData.email;
             const userName = userData.name || userData.userName;
@@ -211,6 +225,20 @@ async function creditDailyROI() {
                 updated_at: new Date().toISOString()
               })
               .eq('idnum', investment.idnum);
+
+            // Add in-app notification for daily ROI credit
+            try {
+              await supabase.from('notifications').insert({
+                idnum: investment.idnum,
+                title: 'Daily ROI Credited',
+                message: `Your daily ROI of $${dailyRoiAmount.toFixed(2)} has been credited to your account! New balance: $${newBalance.toFixed(2)}`,
+                type: 'success',
+                read: false,
+                created_at: new Date().toISOString()
+              });
+            } catch (notifyErr) {
+              console.error('⚠️ Failed to create in-app notification for daily ROI:', notifyErr.message);
+            }
 
             // Send daily ROI notification email
             const userEmail = userData.email;
