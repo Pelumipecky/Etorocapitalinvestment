@@ -8239,58 +8239,6 @@ function UserDashboard() {
         </div>
       )}
 
-      {/* Floating Profit Notification Toast */}
-      {notifications.length > 0 && (() => {
-        const recentSuccess = notifications.find((n: Notification) => n.type === 'success');
-        if (recentSuccess) {
-          return (
-            <div
-              style={{
-                position: 'fixed',
-                bottom: '30px',
-                right: '30px',
-                backgroundColor: '#10b981',
-                color: 'white',
-                padding: '16px 24px',
-                borderRadius: '12px',
-                boxShadow: '0 8px 24px rgba(16, 185, 129, 0.35)',
-                maxWidth: '380px',
-                animation: 'toastSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                zIndex: 9999,
-                fontFamily: 'var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255,255,255,0.2)'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <span style={{ fontSize: '24px', flexShrink: 0, marginTop: '2px' }}>�</span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: '700', fontSize: '15px', marginBottom: '4px', lineHeight: 1.2 }}>
-                    {recentSuccess.title || 'Profit Credited'}
-                  </div>
-                  <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.9)', marginBottom: '6px', lineHeight: 1.4 }}>
-                    {recentSuccess.message}
-                  </div>
-                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>
-                    {recentSuccess.created_at ? new Date(recentSuccess.created_at).toLocaleTimeString('en-US', { 
-                      hour: '2-digit', 
-                      minute: '2-digit', 
-                      second: '2-digit',
-                      hour12: true 
-                    }) : new Date().toLocaleTimeString('en-US', { 
-                      hour: '2-digit', 
-                      minute: '2-digit', 
-                      second: '2-digit',
-                      hour12: true 
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        }
-      })()}
-
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; }
@@ -8314,28 +8262,6 @@ function UserDashboard() {
           }
           50% {
             transform: scale(1.05);
-          }
-        }
-
-        @keyframes toastSlideIn {
-          from {
-            opacity: 0;
-            transform: translateX(400px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes toastFadeOut {
-          from {
-            opacity: 1;
-            transform: translateX(0);
-          }
-          to {
-            opacity: 0;
-            transform: translateX(400px);
           }
         }
       `}</style>
