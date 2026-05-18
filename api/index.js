@@ -420,6 +420,87 @@ app.post('/api/admin/investments/approve', async (req, res) => {
       console.error('⚠️ notification insert failed:', notifyErr);
     }
 
+    // Credit referral bonus if this investment was referred
+    try {
+      // Check if user has a referrer
+      const { data: referralRecord, error: referralError } = await supabase
+        .from('referrals')
+        .select('*')
+        .eq('referredId', updated.idnum)
+        .eq('bonusAwarded', false)
+        .single();
+
+      if (referralRecord && !referralError) {
+        // Calculate 5% referral bonus
+        const referralBonus = (updated.capital || 0) * 0.05;
+        const referrerId = referralRecord.referrerId;
+
+        console.log(`💰 Processing referral bonus: ${referralBonus} for referrer ${referrerId}`);
+
+        // Fetch referrer
+        const { data: referrer, error: referrerError } = await supabase
+          .from('users')
+          .select('idnum, email, userName, name, balance, referralBonusTotal')
+          .eq('idnum', referrerId)
+          .single();
+
+        if (referrer && !referrerError) {
+          // Update referrer's balance and bonus total
+          const newBalance = (referrer.balance || 0) + referralBonus;
+          const newBonusTotal = (referrer.referralBonusTotal || 0) + referralBonus;
+
+          const { error: updateReferrerError } = await supabase
+            .from('users')
+            .update({
+              balance: newBalance,
+              referralBonusTotal: newBonusTotal
+            })
+            .eq('idnum', referrerId);
+
+          if (!updateReferrerError) {
+            console.log(`✅ Referrer ${referrerId} balance updated: +$${referralBonus.toFixed(2)}`);
+
+            // Mark bonus as awarded
+            const { error: markAwardedError } = await supabase
+              .from('referrals')
+              .update({ bonusAwarded: true })
+              .eq('id', referralRecord.id);
+
+            if (!markAwardedError) {
+              console.log(`✅ Referral bonus marked as awarded`);
+            }
+
+            // Send referral bonus earned notification
+            try {
+              await fetch(`${process.env.API_BASE_URL || 'http://localhost:5000'}/api/notify/referral-bonus`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  referrerId: referrer.idnum,
+                  referrerEmail: referrer.email,
+                  referrerName: referrer.userName || referrer.name || 'User',
+                  bonusAmount: referralBonus,
+                  sourceAmount: updated.capital,
+                  sourceType: 'investment',
+                  newTotalBonus: newBonusTotal
+                })
+              });
+              console.log(`✅ Referral bonus notification sent to ${referrer.email}`);
+            } catch (notifyErr) {
+              console.error('⚠️ Failed to send referral bonus notification:', notifyErr.message);
+            }
+          } else {
+            console.error('❌ Failed to update referrer balance:', updateReferrerError);
+          }
+        } else {
+          console.error('❌ Referrer not found:', referrerError);
+        }
+      }
+    } catch (referralProcessError) {
+      console.error('⚠️ Error processing referral bonus:', referralProcessError.message);
+      // Don't fail the approval, just log the error
+    }
+
     // Send approval email (idempotent guard handled by status check above)
     const emailDetails = {
       id: investmentId,
