@@ -104,7 +104,7 @@ const DashboardMarquee = ({ btcPrice, loading }: { btcPrice: number; loading: bo
     <div className="marquee-content">
       <span className="marquee-item"><i className="icofont-rocket-alt-2"></i> {bitcoinMessage}</span>
       <span className="marquee-item"><i className="icofont-star"></i> New "Diamond Hands" Plan available: Earn 150% ROI in 30 Days.</span>
-      <span className="marquee-item"><i className="icofont-gift"></i> Limited Time: Refer a friend and earn 10% commission on their first deposit or investment!</span>
+      <span className="marquee-item"><i className="icofont-gift"></i> Limited Time: Refer a friend and earn 5% commission on their first deposit or investment!</span>
       <span className="marquee-item"><i className="icofont-shield-alt"></i> Security Update: Enable 2FA for enhanced account protection.</span>
       <span className="marquee-item"><i className="icofont-chart-growth"></i> Top Gainer: ETH up 12% in the last 24 hours.</span>
       <span className="marquee-item"><i className="icofont-info-circle"></i> System Maintenance scheduled for Sunday 02:00 UTC.</span>
@@ -4940,7 +4940,7 @@ function UserDashboard() {
                   </div>
                   <div className="stat-details">
                     <p className="stat-label">Commission Rate</p>
-                    <h2 className="stat-value">10%</h2>
+                    <h2 className="stat-value">5%</h2>
                     <p className="stat-change positive">On first deposit/investment</p>
                   </div>
                 </div>
@@ -5027,7 +5027,7 @@ function UserDashboard() {
                   <div className="empty-state">
                     <i className="icofont-users-alt-3"></i>
                     <p>No referrals yet</p>
-                    <small style={{ color: '#64748b' }}>Share your referral link to start earning 10% commissions</small>
+                    <small style={{ color: '#64748b' }}>Share your referral link to start earning 5% commissions</small>
                   </div>
                 )}
               </div>
@@ -5100,7 +5100,7 @@ function UserDashboard() {
                       fontWeight: 700
                     }}>3</div>
                     <h5 style={{ color: '#f8fafc', marginBottom: '0.25rem' }}>Earn Rewards</h5>
-                    <p style={{ color: '#94a3b8', fontSize: '0.8125rem', margin: 0 }}>Get 10% of their deposit as bonus</p>
+                    <p style={{ color: '#94a3b8', fontSize: '0.8125rem', margin: 0 }}>Get 5% of their deposit as bonus</p>
                   </div>
                 </div>
               </div>
